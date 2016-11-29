@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>title</key>
+		<string>直角转弯</string>
+		<key>image</key>
+		<string></string>
+		<key>moviewurl</key>
+		<string></string>
+		<key>ram</key>
+		<string></string>
+		<key>urlName</key>
+		<string>Two0</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>坡路定点停车起步</string>
+		<key>image</key>
+		<string></string>
+		<key>moviewurl</key>
+		<string></string>
+		<key>ram</key>
+		<string></string>
+		<key>urlName</key>
+		<string>Two1</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>倒车入库</string>
+		<key>image</key>
+		<string></string>
+		<key>moviewurl</key>
+		<string></string>
+		<key>ram</key>
+		<string></string>
+		<key>urlName</key>
+		<string>Two2</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>侧方停车</string>
+		<key>image</key>
+		<string></string>
+		<key>moviewurl</key>
+		<string></string>
+		<key>ram</key>
+		<string></string>
+		<key>urlName</key>
+		<string>Two3</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>曲线行驶</string>
+		<key>image</key>
+		<string></string>
+		<key>moviewurl</key>
+		<string></string>
+		<key>ram</key>
+		<string></string>
+		<key>urlName</key>
+		<string>Two4</string>
+	</dict>
+</array>
+</plist>

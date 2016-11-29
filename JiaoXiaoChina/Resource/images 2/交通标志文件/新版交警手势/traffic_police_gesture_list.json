@@ -1,0 +1,124 @@
+{
+    "categorylist": [
+                     {
+                     "title": "示意车辆靠边停车信号",
+                     "count": "1",
+                     "image":"464",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "减速慢行信号",
+                     "count": "1",
+                     "image":"465",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "右转弯信号",
+                     "count": "1",
+                     "image":"466",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "变道信号",
+                     "count": "1",
+                     "image":"467",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "左转弯待转信号",
+                     "count": "1",
+                     "image":"468",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "停止信号",
+                     "count": "1",
+                     "image":"469",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "左转弯信号",
+                     "count": "1",
+                     "image":"470",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     },
+                     {
+                     "title": "直行信号",
+                     "count": "1",
+                     "image":"471",
+                     "action": {
+                     "actiontype": "loadpage",
+                     "extparam": {
+                     "jsonName": "traffic_police_gesture",
+                     "pageType": 0
+                     },
+                     "pagetype": "biaozhigrid",
+                     "title": "交通标志",
+                     "url": ""
+                     }
+                     }
+                     ]
+}

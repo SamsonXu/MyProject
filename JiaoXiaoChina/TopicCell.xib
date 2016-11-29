@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="myCell" id="gTV-IL-0wX" customClass="TopicCell">
+            <rect key="frame" x="0.0" y="0.0" width="240" height="274"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="240" height="274"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vSn-WK-iJN">
+                        <rect key="frame" x="102" y="230" width="36" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="eWS-Es-DI4"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xuW-Li-ugt">
+                        <rect key="frame" x="10" y="0.0" width="220" height="220"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="xuW-Li-ugt" secondAttribute="height" multiplier="1:1" id="S7H-ua-423"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="xuW-Li-ugt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="AFY-Et-T3E"/>
+                <constraint firstItem="vSn-WK-iJN" firstAttribute="top" secondItem="xuW-Li-ugt" secondAttribute="bottom" constant="10" id="Mde-dz-HO0"/>
+                <constraint firstItem="xuW-Li-ugt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="X2h-uG-5xn"/>
+                <constraint firstItem="xuW-Li-ugt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aZF-Ll-ZE6"/>
+                <constraint firstAttribute="trailing" secondItem="xuW-Li-ugt" secondAttribute="trailing" constant="10" id="fGl-jk-NIR"/>
+                <constraint firstItem="vSn-WK-iJN" firstAttribute="centerX" secondItem="xuW-Li-ugt" secondAttribute="centerX" id="hE5-KF-ti8"/>
+            </constraints>
+            <size key="customSize" width="240" height="274"/>
+            <connections>
+                <outlet property="topicImgView" destination="xuW-Li-ugt" id="tAc-oD-1Yj"/>
+                <outlet property="topicLabel" destination="vSn-WK-iJN" id="KaV-by-EK6"/>
+            </connections>
+            <point key="canvasLocation" x="524" y="223"/>
+        </collectionViewCell>
+    </objects>
+</document>

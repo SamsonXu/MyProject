@@ -1,0 +1,30 @@
+//
+//  PrefixHeader.pch
+//  JiaoXiaoChina
+//
+//  Created by 车界（上海）广告有限 on 16/4/22.
+//  Copyright © 2016年 车界（上海）广告有限. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import "Define.h"
+#import "Masonry.h"
+#import "MyControl.h"
+#import "FMDB.h"
+#import "UIImageView+WebCache.h"
+#import "DBManager.h"
+#import "DefaultManager.h"
+#import "JSONModel.h"
+#import "AFNetworking.h"
+#import "HttpManager.h"
+#import "MyTabBarController.h"
+#import "RESideMenu.h"
+#import "DefaultManager.h"
+#import "MJRefresh.h"
+#import "UIImage+GIF.h"
+#import "UMSocial.h"
+#import "UMSocialScreenShoter.h"
+#import "MBProgressHUD+MJ.h"
+#endif 

@@ -1,0 +1,169 @@
+{
+  "categorylist" : [
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_jinling_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "42",
+      "image" : "472",
+      "title" : "禁令标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_warning_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "48",
+      "image" : "473",
+      "title" : "警告标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_zhishi_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "29",
+      "image" : "474",
+      "title" : "指示标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_zhilu_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "126",
+      "image" : "475",
+      "title" : "指路标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_road_construct",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "26",
+      "image" : "476",
+      "title" : "道路施工安全标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_lvyouqu_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "17",
+      "image" : "477",
+      "title" : "旅游区标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_fuzhu_sign",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "16",
+      "image" : "478",
+      "title" : "辅助标志"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_jinzhi_biaoxian",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "24",
+      "image" : "479",
+      "title" : "禁止标线"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_warning_biaoxian",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "13",
+      "image" : "480",
+      "title" : "警告标线"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_zhishi_biaoxian",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "33",
+      "image" : "481",
+      "title" : "指示标线"
+    },
+    {
+      "action" : {
+        "actiontype" : "loadpage",
+        "extparam" : {
+          "jsonName" : "biaozhi_grid_2_road_safe",
+          "pageType" : 3
+        },
+        "pagetype" : "biaozhigrid",
+        "title" : "交通标志",
+        "url" : ""
+      },
+      "count" : "15",
+      "image" : "482",
+      "title" : "道路安全设施设置"
+    }
+  ]
+}
