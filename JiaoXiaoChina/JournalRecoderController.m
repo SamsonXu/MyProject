@@ -30,8 +30,9 @@
 
 - (void)requestData{
     
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlXCJL parameters:nil sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         _dataArray = responseObject[@"data"];
         [_tableView reloadData];
     } failBlock:^{

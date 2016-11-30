@@ -44,12 +44,14 @@
 }
 
 - (void)requestData{
-
+    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlRank parameters:@{@"kid":[NSString stringWithFormat:@"%ld",_kid],@"cityid":_currCity,@"type":[NSString stringWithFormat:@"%ld",_type]} sucBlock:^(id responseObject) {
+        KMBProgressHide;
         _dataArray = [RankModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 

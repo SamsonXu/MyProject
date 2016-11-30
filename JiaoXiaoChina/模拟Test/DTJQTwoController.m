@@ -38,14 +38,17 @@
 }
 
 - (void)requestData{
+    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:self.url parameters:nil sucBlock:^(id responseObject) {
+        KMBProgressHide;
         NSArray *array = responseObject;
         for (NSDictionary *dict in array) {
             [_dataArray addObject:dict];
         }
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 

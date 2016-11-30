@@ -25,11 +25,7 @@
 
 @implementation TestViewController
 
-- (void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = NO;
 }
 
@@ -185,15 +181,18 @@
 - (void)doPushWithVc:(UIViewController *)vc{
     
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)doPush:(UIViewController *)vc{
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)leftClick:(UIButton *)btn{
     LoginViewController *vc = [[LoginViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -10,7 +10,7 @@
 
 @interface ChangeCityController ()<UISearchResultsUpdating>
 {
-    UISearchController *_searchCtrl;
+    UISearchController *_searchCtrl;//搜索栏
     NSMutableArray *_resultArray;
     NSMutableArray *_hotArray;
     NSInteger _line;
@@ -98,12 +98,13 @@
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, KScreenWidth, KScreenHeight-64) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    [MyControl setExtraCellLineHidden:_tableView];
     [self.view addSubview:_tableView];
     [self addBtnWithTitle:nil imageName:KBtnBack navBtn:KNavBarLeft];
     
     UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 90)];
     headView.backgroundColor = [UIColor whiteColor];
-    //搜索栏
+    
     _searchCtrl = [[UISearchController alloc]initWithSearchResultsController:nil];
     _searchCtrl.searchBar.frame = CGRectMake(0, 0, KScreenWidth, 40);
     _searchCtrl.searchBar.barTintColor = [UIColor colorWithWhite:0.95 alpha:1.0];
@@ -168,9 +169,12 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ide];
     }
+    
     if (_searchCtrl.isActive) {
-        
-        cell.textLabel.text = _resultArray[indexPath.row];
+        for (UIView *view in cell.contentView.subviews) {
+            [view removeFromSuperview];
+        }
+        cell.textLabel.text = _resultArray[indexPath.row][@"areaname"];
     }else if (indexPath.section == 0){
         
         CGFloat width = (KScreenWidth-50)/3;
@@ -215,15 +219,24 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 0) {
-        return;
+    
+    
+    if (!_searchCtrl.active) {
+        if (indexPath.section == 0) {
+            return;
+        }
+        if (_isInfo) {
+            [self.infoDelegate changeCityInfo:@[_dataArray[indexPath.section-1][indexPath.row][@"id"],_dataArray[indexPath.section-1][indexPath.row][@"areaname"]]];
+        }else{
+            [self.delegate changeCityName:_dataArray[indexPath.section-1][indexPath.row][@"areaname"]];
+        }
+        
+    }else{
+        
+        [self.delegate changeCityName:_resultArray[indexPath.row][@"areaname"]];
+        _searchCtrl.active = NO;
     }
     
-    if (_isInfo) {
-        [self.infoDelegate changeCityInfo:@[_dataArray[indexPath.section-1][indexPath.row][@"id"],_dataArray[indexPath.section-1][indexPath.row][@"areaname"]]];
-    }else{
-        [self.delegate changeCityName:_dataArray[indexPath.section-1][indexPath.row][@"areaname"]];
-    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -231,7 +244,7 @@
     NSString *str;
     
     if (_searchCtrl.isActive) {
-        str =  @"搜索到下列城市";
+        str =  @"  搜索到下列城市";
     }else if (section == 0) {
         str =  @"  热门城市";
     }else{
@@ -266,7 +279,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.section == 0) {
+    if (_searchCtrl.active) {
+        return 40;
+    }else if (indexPath.section == 0) {
         return _line*40+10;
     }else{
         return 40;
@@ -274,8 +289,23 @@
 }
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController{
-    
+    [_resultArray removeAllObjects];
+    NSString *putStr = searchController.searchBar.text;
+    NSInteger length = putStr.length;
+    if (length == 0) {
         [_tableView reloadData];
+        return;
+    }
+    for (NSArray *array in _dataArray) {
+        
+        for (NSDictionary *dict in array) {
+            if ([putStr isEqualToString:[dict[@"areaname"] substringToIndex:length]]) {
+                [_resultArray addObject:dict];
+            }
+        }
+        
+    }
+    [_tableView reloadData];
 }
 
 - (void)leftClick:(UIButton *)btn{

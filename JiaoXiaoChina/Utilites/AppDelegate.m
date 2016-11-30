@@ -151,7 +151,7 @@
     }else if ([url.host isEqualToString:@"safepay"]){
         //跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"comback:%@",resultDic);
+//            NSLog(@"comback:%@",resultDic);
             NSString *strTitle = @"报名成功";
             NSString *strMsg = @"确定";
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -198,12 +198,12 @@
         switch (resp.errCode) {
             case WXSuccess:
                 strMsg = @"支付结果：成功！";
-                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
+//                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
                 break;
                 
             default:
                 strMsg = [NSString stringWithFormat:@"支付结果：失败！retcode = %d, retstr = %@", resp.errCode,resp.errStr];
-                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
+//                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
                 break;
         }
     }

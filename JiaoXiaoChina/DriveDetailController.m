@@ -31,21 +31,22 @@
 
 - (void)requestData{
 
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlClassList parameters:@{@"id":_model.pid} sucBlock:^(id responseObject) {
-
+        KMBProgressHide;
         _classArray = [ClassModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
     
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlCommentList parameters:@{@"id":_model.pid} sucBlock:^(id responseObject) {
-
+        KMBProgressHide;
         _commentNum = responseObject[@"totalRows"];
         _commentArray = [DrivCommentModel arrayOfModelsFromDictionaries:responseObject[@"volist"]];
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -55,6 +56,11 @@
     [self addBtnWithTitle:nil imageName:KBtnBack navBtn:KNavBarLeft];
     [self addBtnWithTitle:nil imageName:@"navigationbar_icon_share" navBtn:KNavBarRight];
     _tableView.frame = CGRectMake(0, 64, KScreenWidth, KScreenHeight-64-40);
+   
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenHeight-41, KScreenWidth, 1)];
+    lineView.backgroundColor = KGrayColor;
+    [self.view addSubview:lineView];
+    
     NSArray *images = @[@"",@""];
     NSArray *titles = @[@"驾校详情",@"电话咨询"];
     for (int i = 0; i < images.count; i++) {
@@ -200,6 +206,7 @@
     if (index == 0) {
         WebViewController *vc = [[WebViewController alloc]init];
         vc.navTitle = _model.dname;
+        vc.url = [NSString stringWithFormat:@"%@?id=%@",KUrlDriveDetail,_model.pid];
         [self.navigationController pushViewController:vc animated:YES];
     }else if (index == 1){
         [self showAlertViewWith:@[@"咨询驾校中国专业学车顾问",[NSString stringWithFormat:@"%@",_model.tel],@"取消",@"确定"] sel:@selector(telephone)];

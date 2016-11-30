@@ -48,9 +48,9 @@
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"nickname":_textView.text,@"token":[DefaultManager getValueOfKey:@"token"]} options:NSJSONWritingPrettyPrinted error:nil];
         NSString *str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
+        KMBProgressShow;
         [[HttpManager shareManager]requestDataWithMethod:KUrlPut urlString:KUrlUpdateName parameters:str sucBlock:^(id responseObject) {
-            
+            KMBProgressHide;
             if ([responseObject[@"status"] integerValue] == 1){
                 
                 [self.navigationController popViewControllerAnimated:YES];
@@ -59,7 +59,7 @@
                 [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
             }
         } failBlock:^{
-            
+            KMBProgressHide;
         }];
     }else {
         [self showAlertViewWith:@[@"昵称长度为1~10个字！",@"确定"] sel:nil];

@@ -25,11 +25,7 @@
 
 @implementation RidersViewController
 
-- (void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = NO;
 }
 
@@ -54,12 +50,16 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 120;
     [_tableView registerClass:[RiderCellOne class] forCellReuseIdentifier:@"myCell"];
+    [MyControl setExtraCellLineHidden:_tableView];
     [self.view addSubview:_tableView];
     [self addRefreshHasHeader:YES hasFooter:YES];
 }
 
 - (void)requestCate{
+    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlRiderCate parameters:nil sucBlock:^(id responseObject) {
+        KMBProgressHide;
         _collectArr = [CateModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         if (_collectArr.count%4 == 0) {
             _colSection = _collectArr.count/4;
@@ -69,7 +69,7 @@
 
         [self createHeadView];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -239,6 +239,7 @@
         vc.isOthers = YES;
         vc.pid = model.pid;
         [self.navigationController pushViewController:vc animated:YES];
+        self.tabBarController.tabBar.hidden = YES;
     }
    
 }
@@ -263,6 +264,7 @@
     CateModel *model = _collectArr[indexPath.item + indexPath.section*4];
     vc.cateId = model.pid;
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -285,6 +287,7 @@
     PublishTopicController *vc = [[PublishTopicController alloc]init];
     
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)changFavoriteNum:(BOOL)add pid:(NSString *)pid{
@@ -306,6 +309,7 @@
     LoginViewController *vc = [[LoginViewController alloc]init];
     vc.isPush = YES;
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {

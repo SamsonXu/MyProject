@@ -29,7 +29,11 @@
 }
 
 - (void)requestData{
+    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:_url parameters:nil sucBlock:^(id responseObject) {
+        
+        KMBProgressHide;
         NSArray *array = responseObject[@"volist"];
         for (NSDictionary *dict in array) {
             ListModel *model = [[ListModel alloc]initWithDictionary:dict error:nil];
@@ -48,7 +52,7 @@
         }
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 
 }

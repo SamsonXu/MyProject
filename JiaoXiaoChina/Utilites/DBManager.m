@@ -31,9 +31,9 @@
         _fmdb = [[FMDatabase alloc]initWithPath:path];
     }
     if ([_fmdb open]) {
-        NSLog(@"open success");
+//        NSLog(@"open success");
     }else{
-        NSLog(@"%@",_fmdb.lastError);
+//        NSLog(@"%@",_fmdb.lastError);
     }
     return self;
 }

@@ -38,12 +38,11 @@
         view.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:view];
         
-        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(100, 5, KScreenWidth-100, 30)];
-//        field.borderStyle = UITextBorderStyleRoundedRect;
-        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(0, 0, 100, 40) fontOfSize:14];
+        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(30, 10, 60, 30) fontOfSize:14];
         leftLabel.textAlignment = NSTextAlignmentRight;
-        field.leftView = leftLabel;
-        field.leftViewMode = UITextFieldViewModeAlways;
+        [view addSubview:leftLabel];
+        
+        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(95, 10, KScreenWidth-95, 30)];
         field.placeholder = places[i];
         field.adjustsFontSizeToFitWidth = YES;
         field.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -108,7 +107,7 @@
     if (_isPush) {
         [self.navigationController popViewControllerAnimated:YES];
     }else{
-       [self.sideMenuViewController setContentViewController:[MyTabBarController shareTabBar]]; 
+       [self.sideMenuViewController setContentViewController:[MyTabBarController shareTabBar]];
     }
     
 }
@@ -137,7 +136,9 @@
         }else{
             
             NSDictionary *dict = @{@"username":_nameField.text,@"password":_passField.text};
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlLogin parameters:dict sucBlock:^(id responseObject) {
+                KMBProgressHide;
                 NSString *message = responseObject[@"msg"];
                 NSArray *array = @[message,@"确定"];
                 if (!self.isPush) {
@@ -164,7 +165,7 @@
                 }
                
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
             return;
         }

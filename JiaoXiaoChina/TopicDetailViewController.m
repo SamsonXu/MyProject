@@ -36,16 +36,18 @@
 
 - (void)requestData{
     
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicDetail1 parameters:@{@"id":_pid} sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         _detailDict = responseObject[@"data"];
         _model = [[JournalModel alloc]initWithDictionary:responseObject[@"data"] error:nil];
         [_tableView reloadData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
     
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicDetail2 parameters:@{@"id":_pid} sucBlock:^(id responseObject) {
+        
         _favoriteArr = responseObject[@"volist"];
         [_tableView reloadData];
     } failBlock:^{

@@ -25,11 +25,13 @@
 
 - (void)requestData{
     
+    [MBProgressHUD showMessage:@"正在加载"];
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlCashList parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
+        [MBProgressHUD hideHUD];
         _dataArray = [CashModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         [_collectionView reloadData];
     } failBlock:^{
-        
+        [MBProgressHUD hideHUD];
     }];
 }
 
@@ -42,20 +44,20 @@
     fieldView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:fieldView];
     
-    _field = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, KScreenWidth-20, 40)];
+    _field = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, KScreenWidth-80, 40)];
     _field.backgroundColor = [UIColor whiteColor];
     _field.borderStyle = UITextBorderStyleNone;
     _field.placeholder = @"请输入兑换码";
     _field.font = [UIFont systemFontOfSize:14];
     
-    UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 5, 60, 30) title:@"兑换" imageName:nil];
+    UIButton *btn = [MyControl buttonWithFram:CGRectMake(KScreenWidth-70, 5, 60, 30) title:@"兑换" imageName:nil];
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     btn.backgroundColor = KColorSystem;
     btn.layer.cornerRadius = 5;
+    btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [fieldView addSubview:btn];
     
-    _field.rightView = btn;
-    _field.rightViewMode = UITextFieldViewModeAlways;
     _field.delegate = self;
     [fieldView addSubview:_field];
     
@@ -74,14 +76,16 @@
 
 - (void)btnClick:(UIButton *)btn{
     
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlCashChange parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"code":_field.text} sucBlock:^(id responseObject) {
         
+        KMBProgressHide;
         [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
         if ([responseObject[@"status"] integerValue] == 1) {
             [self requestData];
         }
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 

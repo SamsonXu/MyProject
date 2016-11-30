@@ -27,10 +27,6 @@
     [self requestDate];
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self createUI];
@@ -144,6 +140,7 @@
         LoginViewController *vc = [[LoginViewController alloc]init];
         vc.isPush = YES;
         [self.navigationController pushViewController:vc animated:YES];
+        self.tabBarController.tabBar.hidden = YES;
     }
 
 }
@@ -219,6 +216,7 @@
 - (void)rightClick:(UIButton *)btn{
     SetViewController *vc = [[SetViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -234,6 +232,7 @@
         JournalViewController *vc = [[JournalViewController alloc]init];
         [self.navigationController pushViewController:vc animated:YES];
     }
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {

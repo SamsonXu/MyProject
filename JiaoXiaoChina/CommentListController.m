@@ -51,6 +51,10 @@
     return 120;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (void)leftClick:(UIButton *)btn{
     [self.navigationController popViewControllerAnimated:YES];
 }

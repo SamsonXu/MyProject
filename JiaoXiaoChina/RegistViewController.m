@@ -7,7 +7,7 @@
 //
 
 #import "RegistViewController.h"
-
+#import "WebViewController.h"
 @interface RegistViewController ()<UITextFieldDelegate>
 {
     UITextField *_nameField;
@@ -36,17 +36,22 @@
     NSArray *titles = @[@"用户名:",@"密 码:",@"验证码:"];
     NSArray *places = @[@"请输入手机号",@"请输入密码",@"请输入验证码"];
     for (int i = 0; i < titles.count; i++) {
-        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(0, 64+20+39*i, KScreenWidth, 40)];
-        field.borderStyle = UITextBorderStyleRoundedRect;
-        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(0, 0, 100, 40) fontOfSize:14];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 64+20+49*i, KScreenWidth, 49)];
+        view.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:view];
+        
+        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(30, 10, 60, 30) fontOfSize:14];
         leftLabel.textAlignment = NSTextAlignmentRight;
-        field.leftView = leftLabel;
-        field.leftViewMode = UITextFieldViewModeAlways;
+        [view addSubview:leftLabel];
+        
+        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(95, 10, KScreenWidth-95, 30)];
         field.placeholder = places[i];
         field.adjustsFontSizeToFitWidth = YES;
         field.clearButtonMode = UITextFieldViewModeWhileEditing;
         field.font = [UIFont systemFontOfSize:14];
         field.delegate = self;
+        
         if (i == 0) {
             field.keyboardType = UIKeyboardTypeNumberPad;
             _nameField = field;
@@ -64,8 +69,17 @@
             field.rightViewMode = UITextFieldViewModeAlways;
             _codeField = field;
         }
-        [self.view addSubview:field];
+        [view addSubview:field];
     }
+    
+    UIView *lineView1 = [[UIView alloc]initWithFrame:CGRectMake(0, 84+49, KScreenWidth, 1)];
+    lineView1.backgroundColor = KGrayColor;
+    [self.view addSubview:lineView1];
+    
+    UIView *lineView2 = [[UIView alloc]initWithFrame:CGRectMake(0, 84+49*2, KScreenWidth, 1)];
+    lineView2.backgroundColor = KGrayColor;
+    [self.view addSubview:lineView2];
+    
     //注册按钮
     UIButton *logBtn = [MyControl buttonWithFram:CGRectMake(0, 0, 0, 0) title:@"注 册" imageName:nil tag:100];
     [logBtn setBackgroundColor:KColorSystem];
@@ -75,7 +89,7 @@
     [self.view addSubview:logBtn];
     KWS(ws);
     [logBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_codeField.mas_bottom).offset(40);
+        make.top.mas_equalTo(274);
         make.centerX.equalTo(ws.view);
         make.height.mas_equalTo(40);
         make.width.mas_equalTo(KScreenWidth - 20);
@@ -108,8 +122,9 @@
             if ([MyControl isValueToPhoneNumber:_nameField.text] && [MyControl isValueToCode:_passField.text] && _timer) {
                 
                 NSDictionary *dict = @{@"mobile_phone":_nameField.text,@"password":_passField.text,@"sms_code":_codeField.text};
-                
+                KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlRegist2 parameters:dict sucBlock:^(id responseObject) {
+                    KMBProgressHide;
                     if ([responseObject[@"status"] integerValue] == 1) {
                         NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
                         NSHTTPCookie *cookie = [[cookieJar cookies]lastObject];
@@ -119,7 +134,7 @@
                         [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
                     }
                 } failBlock:^{
-                    
+                    KMBProgressHide;
                 }];
                 
             }else{
@@ -185,6 +200,10 @@
             
         }else if (index == 2){
             
+            WebViewController *vc = [[WebViewController alloc]init];
+            vc.title = @"用户使用协议";
+            vc.url = @"";
+            [self.navigationController pushViewController:vc animated:YES];
         }
 }
 

@@ -91,8 +91,9 @@
     if (btn.tag == 100) {
 
             if (_nameField.text.length > 0 && [MyControl isValueToPhoneNumber:_phoneField.text] && _timer) {
-                
+                KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlConsult2 parameters:@{@"sms_code":_codeField.text,@"mobile_phone":_phoneField.text} sucBlock:^(id responseObject) {
+                    KMBProgressHide;
                     if ([responseObject[@"status"] integerValue] == 1) {
                         
                         if (_model.is_payment.integerValue == 0) {
@@ -135,11 +136,13 @@
                 return;
             }
             if (_nameField.text.length > 0 && [MyControl isValueToPhoneNumber:_phoneField.text]) {
+                KMBProgressShow;
                 //获取授权码
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlConsult0 parameters:nil sucBlock:^(id responseObject) {
                     //获取验证码
                     NSDictionary *dict = @{@"sms_phone":_phoneField.text,@"sscode":responseObject[@"sscode"],@"sms_code":responseObject[@"sms_code"]};
                     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlConsult1 parameters:dict sucBlock:^(id responseObject) {
+                        KMBProgressHide;
                         if ([responseObject[@"status"] integerValue] == 1) {
                             
                             _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshTime) userInfo:nil repeats:YES];
@@ -147,11 +150,11 @@
                             [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
                         }
                     } failBlock:^{
-                        
+                        KMBProgressHide;
                     }];
                     
                 } failBlock:^{
-                    
+                    KMBProgressHide;
                 }];
             }else{
                 if (_nameField.text.length == 0) {

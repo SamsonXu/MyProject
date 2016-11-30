@@ -33,7 +33,7 @@
     self.title = @"设置";
     [self addBtnWithTitle:nil imageName:KBtnBack navBtn:KNavBarLeft];
     [_tableView registerNib:[UINib nibWithNibName:@"MyCell" bundle:nil] forCellReuseIdentifier:@"myCell"];
-    _tableView.backgroundColor = KTableViewColor;
+    _tableView.backgroundColor = KGrayColor;
     UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 300, KScreenWidth, 40) title:@"退出登录" imageName:nil];
     btn.backgroundColor = [UIColor whiteColor];
     if (!self.hasLogin) {

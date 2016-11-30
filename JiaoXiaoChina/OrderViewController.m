@@ -28,8 +28,9 @@
 
 - (void)requestData{
     
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlOrderList parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
-
+        KMBProgressHide;
         _dataArray = [OrderModel arrayOfModelsFromDictionaries:responseObject[@"volist"]];
         [_tableView reloadData];
     } failBlock:^{

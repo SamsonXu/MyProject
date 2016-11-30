@@ -35,21 +35,28 @@
     NSArray *titles = @[@"用户名:",@"验证码:"];
     NSArray *places = @[@"请输入手机号",@"请输入验证码"];
     for (int i = 0; i < titles.count; i++) {
-        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(0, 64+20+39*i, KScreenWidth, 40)];
-        field.borderStyle = UITextBorderStyleRoundedRect;
-        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(0, 0, 100, 40) fontOfSize:14];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 64+20+49*i, KScreenWidth, 49)];
+        view.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:view];
+        
+        UILabel *leftLabel = [MyControl labelWithTitle:titles[i] fram:CGRectMake(30, 10, 60, 30) fontOfSize:14];
         leftLabel.textAlignment = NSTextAlignmentRight;
-        field.leftView = leftLabel;
-        field.leftViewMode = UITextFieldViewModeAlways;
+        [view addSubview:leftLabel];
+        
+        UITextField *field = [[UITextField alloc]initWithFrame:CGRectMake(95, 10, KScreenWidth-95, 30)];
         field.placeholder = places[i];
         field.adjustsFontSizeToFitWidth = YES;
         field.clearButtonMode = UITextFieldViewModeWhileEditing;
         field.font = [UIFont systemFontOfSize:14];
         field.delegate = self;
+        
         if (i == 0) {
+            
             field.keyboardType = UIKeyboardTypeNumberPad;
             _nameField = field;
         }else if (i == 1){
+            
             UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 0, 80, 38) title:@"获取验证码" imageName:nil tag:101];
             [btn setTitleColor:KColorSystem forState:UIControlStateNormal];
             btn.layer.borderWidth = 1;
@@ -60,8 +67,13 @@
             field.rightViewMode = UITextFieldViewModeAlways;
             _codeField = field;
         }
-        [self.view addSubview:field];
+        [view addSubview:field];
     }
+    
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 84+49, KScreenWidth, 1)];
+    lineView.backgroundColor = KGrayColor;
+    [self.view addSubview:lineView];
+    
     //确定按钮
     UIButton *logBtn = [MyControl buttonWithFram:CGRectMake(0, 0, 0, 0) title:@"确 定" imageName:nil tag:100];
     [logBtn setBackgroundColor:KColorSystem];
@@ -71,7 +83,7 @@
     [self.view addSubview:logBtn];
     KWS(ws);
     [logBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_codeField.mas_bottom).offset(40);
+        make.top.mas_equalTo(224);
         make.centerX.equalTo(ws.view);
         make.height.mas_equalTo(40);
         make.width.mas_equalTo(KScreenWidth - 20);
@@ -85,7 +97,9 @@
         if ([MyControl isValueToPhoneNumber:_nameField.text]) {
             
             NSDictionary *dict = @{@"sms_phone":_nameField.text,@"sms_code":_codeField.text};
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlCode2 parameters:dict sucBlock:^(id responseObject) {
+                KMBProgressHide;
                 if ([responseObject[@"status"] integerValue] == 1) {
                     NewCodeController *vc = [[NewCodeController alloc]init];
                     vc.number = _nameField.text;
@@ -96,7 +110,7 @@
                     [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
                 }
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
         }else{
         NSArray *array;
@@ -120,8 +134,10 @@
         if (![MyControl isValueToPhoneNumber:_nameField.text]) {
             [self showAlertViewWith:@[@"请输入正确的手机号",@"确定"] sel:nil];
         }else{
+            KMBProgressShow;
             //获取授权码
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlCode0 parameters:nil sucBlock:^(id responseObject) {
+                KMBProgressHide;
                 //获取验证码
                 NSDictionary *dict = @{@"sms_phone":_nameField.text,@"sscode":responseObject[@"sscode"],@"sms_code":responseObject[@"sms_code"]};
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlCode1 parameters:dict sucBlock:^(id responseObject) {
@@ -132,11 +148,11 @@
                         [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
                     }
                 } failBlock:^{
-                    
+
                 }];
                 
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
         }
     }

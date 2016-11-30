@@ -78,9 +78,16 @@
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
     [_bootmScrollView addSubview:_scrollView];
+    
+    
+    
     for (int i = 0; i < _urlArray.count+1; i++) {
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick:)];
         UIImageView *imageView = [MyControl imageViewWithFram:CGRectMake(KScreenWidth*i, 0, KScreenWidth, 90) url:_urlArray[i%_urlArray.count]];
         imageView.backgroundColor = [UIColor colorWithWhite:arc4random()%256/255.0 alpha:1];
+        imageView.userInteractionEnabled = YES;
+        [imageView addGestureRecognizer:tap];
         [_scrollView addSubview:imageView];
     }
     _scrollView.contentSize = CGSizeMake(KScreenWidth*4, 90);
@@ -98,13 +105,8 @@
     [_bootmScrollView addSubview:_pageControl];
     _bootmScrollView.contentSize = CGSizeMake(KScreenWidth, 747);
     _currentPage = 0;
+    
     [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(loopScroll) userInfo:nil repeats:YES];
-    
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapClick:)];
-    [_leftView addGestureRecognizer:tap];
-    [_midView addGestureRecognizer:tap];
-    [_rightView addGestureRecognizer:tap];
     self.lastView = _scrollView;
     [self addRecoderBtn];
 }
@@ -125,7 +127,11 @@
 
 //滚动视图上图片触摸事件
 - (void)tapClick:(UITapGestureRecognizer *)tap{
-    
+    WebViewController *vc = [[WebViewController alloc]init];
+    vc.navTitle = @"待添加链接";
+    vc.url = @"";
+    [self.delegate doPushWithVc:vc];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 //滚动视图下方按钮
@@ -192,13 +198,11 @@
         _cateid = @"5";
     }
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlRiderHeadList parameters:@{@"cateid":_cateid} sucBlock:^(id responseObject) {
-
         NSArray *array = responseObject[@"data"];
         _topicNum = responseObject[@"wd_count"];
        [self createRiderViewWith:array];
         
    } failBlock:^{
-       
    }];
 }
 

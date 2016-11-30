@@ -162,4 +162,7 @@
 #define KColorSystem KColorRGB(19, 153, 229)
 
 #define KGrayColor KColorRGB(241, 241, 241)
+
+#define KMBProgressShow [MBProgressHUD showMessage:nil]
+#define KMBProgressHide [MBProgressHUD hideHUD]
 #endif

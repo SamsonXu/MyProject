@@ -110,8 +110,9 @@
     }
     
     if ([method isEqualToString:KUrlPost]) {
-        
+        KMBProgressShow;
         [[HttpManager shareManager]requestDataWithMethod:method urlString:_urlStr parameters:dict sucBlock:^(id responseObject) {
+            KMBProgressHide;
             if ([responseObject[@"status"] integerValue] == 1) {
                 NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:responseObject[@"data"]]];
                 UIImage *image = [UIImage imageWithData:data];
@@ -119,18 +120,20 @@
                 [self updateInfo];
             }
         } failBlock:^{
-            
+            KMBProgressHide;
         }];
     }else if ([method isEqualToString:KUrlPut]){
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
         NSString *str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
+        KMBProgressShow;
         [[HttpManager shareManager]requestDataWithMethod:method urlString:_urlStr parameters:str sucBlock:^(id responseObject) {
+            KMBProgressHide;
             if ([responseObject[@"status"] integerValue] == 1) {
                 [self updateInfo];
             }
         } failBlock:^{
+            KMBProgressHide;
             [self showAlertViewWith:@[@"请检查网络连接",@"确定"] sel:nil];
         }];
     }
@@ -138,8 +141,9 @@
 
 - (void)updateInfo{
     //重新请求用户信息
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlInfo parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"data"]];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:dict[@"is_cb"] forKey:KJZLX];
@@ -149,7 +153,7 @@
         [defaults setObject:dict forKey:@"userInfo"];
         [self requestData];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
     
 }

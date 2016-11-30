@@ -33,23 +33,23 @@
     NSDictionary *dict;
     if (_isOthers) {
         dict = @{@"token":[DefaultManager getValueOfKey:@"token"],@"uid":_uid};
-        NSLog(@"%@",_uid);
+//        NSLog(@"%@",_uid);
     }else{
         dict = @{@"token":[DefaultManager getValueOfKey:@"token"]};
     }
-    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicList parameters:dict sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         if ([responseObject[@"status"] integerValue] == 1) {
             _dict = responseObject[@"userinfo"];
             _dataArray = [JournalModel arrayOfModelsFromDictionaries:responseObject[@"volist"]];
             [self createHeaderView];
             [_tableView reloadData];
         }else{
-            NSLog(@"%@",responseObject[@"msg"]);
+//            NSLog(@"%@",responseObject[@"msg"]);
         }
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 

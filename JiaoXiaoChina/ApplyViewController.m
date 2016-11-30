@@ -60,7 +60,7 @@
 
 @implementation ApplyViewController
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = NO;
 }
 
@@ -114,14 +114,18 @@
             [_dataArray removeAllObjects];
             [_classArray removeAllObjects];
         }
-        NSArray *array = responseObject[@"data"];
         
-        for (NSDictionary *dict in array) {
-            ApplyModel *model = [[ApplyModel alloc]initWithDictionary:dict error:nil];
-            [_dataArray addObject:model];
-            NSArray *listArr = [ClassModel arrayOfModelsFromDictionaries:dict[@"class_list"]];
-            [_classArray addObject:listArr];
+        if ([responseObject[@"data"] isKindOfClass:[NSArray class]]) {
+            
+            NSArray *array = responseObject[@"data"];
+            for (NSDictionary *dict in array) {
+                ApplyModel *model = [[ApplyModel alloc]initWithDictionary:dict error:nil];
+                [_dataArray addObject:model];
+                NSArray *listArr = [ClassModel arrayOfModelsFromDictionaries:dict[@"class_list"]];
+                [_classArray addObject:listArr];
+            }
         }
+        
         [_tableView reloadData];
         
     } failBlock:^{
@@ -198,7 +202,7 @@
         y = 255;
     }
     _headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, y)];
-    _headView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    _headView.backgroundColor = KGrayColor;
     _tableView.tableHeaderView = _headView;
     //滚动视图
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 120)];
@@ -296,7 +300,7 @@
     }
     
     UIView *view = [UIView new];
-    view.backgroundColor = [UIColor lightGrayColor];
+    view.backgroundColor = [UIColor whiteColor];
     [_headView addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lastBtn.mas_bottom).offset(10);
@@ -313,9 +317,12 @@
         if (i == _type-1) {
             btn.selected = YES;
         }
-        btn.backgroundColor = [UIColor whiteColor];
         btn.titleLabel.font = [UIFont systemFontOfSize:14];
         [view addSubview:btn];
+        
+        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(width*(i+1), 5, 1, 30)];
+        lineView.backgroundColor = KGrayColor;
+        [view addSubview:lineView];
     }
 }
 
@@ -328,6 +335,7 @@
     UILabel *label = btn.subviews[1];
     vc.navTitle = label.text;
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)sortBtnClick:(UIButton *)btn{
@@ -366,6 +374,7 @@
     vc.navTitle = _advArray[index][@"imgtitle"];
     vc.url = _advArray[index][@"imglink"];
     [self.navigationController pushViewController:vc animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 #pragma mark-----scrollView代理方法
@@ -534,6 +543,7 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)headerBtnClick:(UIButton *)btn{
@@ -592,6 +602,7 @@
         ChangeCityController *vc = [[ChangeCityController alloc]init];
         vc.delegate = self;
         [self.navigationController pushViewController:vc animated:YES];
+        self.tabBarController.tabBar.hidden = YES;
     }else if (index == 1) {
         
         [UIView animateWithDuration:1 animations:^{
@@ -604,9 +615,10 @@
             [self.navigationController pushViewController:vc animated:YES];
         }else{
             LoginViewController *vc = [[LoginViewController alloc]init];
+            vc.isPush = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
-        
+        self.tabBarController.tabBar.hidden = YES;
     }else if (index == 2){
         [UIView animateWithDuration:1 animations:^{
             _cashView.hidden = YES;
@@ -643,6 +655,7 @@
     vc.time = time;
     vc.classArray = _limitSaleArray;
     [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)leftClick:(UIButton *)btn{
@@ -654,7 +667,6 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = YES;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 

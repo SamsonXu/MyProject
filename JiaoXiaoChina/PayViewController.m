@@ -33,8 +33,9 @@
 
 - (void)requestData{
     _dataArray = [NSMutableArray arrayWithArray:@[@{@"image":@"wx",@"title":@"微信支付"},@{@"image":@"zfb",@"title":@"支付宝支付"}]];
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlCashList parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
-
+        KMBProgressHide;
         NSArray *array = [CashModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         NSString *str;
         if (_model.is_payment_type.integerValue == 2) {
@@ -60,7 +61,7 @@
         }
         
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -123,9 +124,11 @@
     if (_currentCell == 0) {
         if ([WXApi isWXAppInstalled]) {
             if (_isOrder) {
+                KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlPay3 parameters:@{@"id":_orderId,@"token":[DefaultManager getValueOfKey:@"token"],@"pay_type":@"1"} sucBlock:^(id responseObject) {
-                    NSLog(@"id:%@",_orderId);
-                    NSLog(@"-----%@---%@",responseObject,responseObject[@"msg"]);
+                    KMBProgressHide;
+//                    NSLog(@"id:%@",_orderId);
+//                    NSLog(@"-----%@---%@",responseObject,responseObject[@"msg"]);
                     NSDictionary *wxDict = responseObject[@"data"];
                     //下面的参数让服务端传过来
                     PayReq *request = [[PayReq alloc] init];
@@ -143,12 +146,13 @@
                     request.sign= wxDict[@"sign"];
                     [WXApi sendReq:request];
                 } failBlock:^{
-                    
+                    KMBProgressHide;
                 }];
             }else{
                 NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneNum,@"username":_userName,@"token":[NSString stringWithFormat:@"%@",[DefaultManager getValueOfKey:@"token"]],@"pay_type":@"1",@"rid":[NSString stringWithFormat:@"%@",_cashModel.pid]};
-                
+                KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlPay2 parameters:dict sucBlock:^(id responseObject) {
+                    KMBProgressHide;
                     NSDictionary *wxDict = responseObject[@"data"];
                     //下面的参数让服务端传过来
                     PayReq *request = [[PayReq alloc] init];
@@ -167,7 +171,7 @@
                     [WXApi sendReq:request];
                     
                 } failBlock:^{
-                    
+                    KMBProgressHide;
                 }];
 
             }
@@ -177,26 +181,29 @@
     }else if (_currentCell == 1){
         
         if (_isOrder) {
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlPay3 parameters:@{@"id":_orderId,@"token":[DefaultManager getValueOfKey:@"token"],@"pay_type":@"2"} sucBlock:^(id responseObject) {
-                NSLog(@"---%@---%@",responseObject,responseObject[@"msg"]);
+                KMBProgressHide;
+//                NSLog(@"---%@---%@",responseObject,responseObject[@"msg"]);
                 
                 [[AlipaySDK defaultService] payOrder:responseObject[@"data"] fromScheme:@"jiaxiaochina" callback:^(NSDictionary *resultDic) {
 
                 }];
 
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
         }else{
             NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneNum,@"username":_userName,@"token":[NSString stringWithFormat:@"%@",[DefaultManager getValueOfKey:@"token"]],@"pay_type":@"2",@"rid":[NSString stringWithFormat:@"%@",_cashModel.pid]};
-
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlPay2 parameters:dict sucBlock:^(id responseObject) {
-                NSLog(@"---%@",responseObject);
+                KMBProgressHide;
+//                NSLog(@"---%@",responseObject);
                 [[AlipaySDK defaultService] payOrder:responseObject[@"data"] fromScheme:@"jiaxiaochina" callback:^(NSDictionary *resultDic) {
-                    NSLog(@"here-----%@",resultDic);
+//                    NSLog(@"here-----%@",resultDic);
                 }];
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
 
         }

@@ -70,12 +70,13 @@
         str = KUrlTest3;
         adStr = @"77";
     }
-    
+//    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlAdver1 parameters:@{@"id":adStr} sucBlock:^(id responseObject) {
+        KMBProgressHide;
         [self addImageViewWithImageUrl:@""];
         [_collectView reloadData];
     } failBlock:^{
-        
+//        KMBProgressHide;
     }];
    
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:str parameters:nil sucBlock:^(id responseObject) {
@@ -195,7 +196,6 @@
         _topicNum = responseObject[@"wd_count"];
         [self createRiderViewWith:array];
     } failBlock:^{
-        
     }];
 }
 

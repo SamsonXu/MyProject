@@ -45,11 +45,13 @@
 
 - (void)requestCate{
     
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlRiderCate parameters:nil sucBlock:^(id responseObject) {
+        KMBProgressHide;
         _topicArr = [CateModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         [self createTopicView];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -57,25 +59,25 @@
     if (!_isJournal) {
         return;
     }
-    
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicType parameters:@{@"id":_pid} sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         _typeDict = responseObject[@"data"];
         _topicField.text = [NSString stringWithFormat:@" 我正在进行“%@”",_typeDict[@"title"]];
         [_typeBtn setTitle:_typeDict[@"wenda_cate_name"] forState:UIControlStateNormal];
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
     
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicRecod parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         if ([responseObject[@"status"] integerValue] == 1) {
             _imageArray = responseObject[@"data"];
             _currentImg = _imageArray.count;
             [self changeImg];
         }
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -315,15 +317,16 @@
     UIButton *btn = [self.view viewWithTag:100+_currentImg];
     UIImage *image = [UIImage sd_animatedGIFNamed:@"loding-3"];
     [btn setImage:image forState:UIControlStateNormal];
+    KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlTopicTP parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"image_type":imgType,@"wenda_image":data} sucBlock:^(id responseObject) {
-        
+        KMBProgressHide;
         [btn setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@""]]] forState:UIControlStateNormal];
         btn.subviews[1].hidden = NO;
         _currentImg++;
         UIButton *btn1 = [self.view viewWithTag:100+_currentImg];
         btn1.hidden = NO;
     } failBlock:^{
-        
+        KMBProgressHide;
     }];
 }
 
@@ -416,18 +419,20 @@
             cityName = @"";
         }
         if (_isJournal) {
-            
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlJournalPublish parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"vid":_typeDict[@"wcid"],@"cityid":cityId,@"title":_topicField.text,@"content":_textView.text,@"cityname":cityName} sucBlock:^(id responseObject) {
+                KMBProgressHide;
                 [self.navigationController popViewControllerAnimated:YES];
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
         }else{
-            
+            KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlTopicPublish parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"cateid":_topicId,@"cityid":cityId,@"title":_topicField.text,@"content":_textView.text,@"cityname":cityName} sucBlock:^(id responseObject) {
+                KMBProgressHide;
                 [self.navigationController popViewControllerAnimated:YES];
             } failBlock:^{
-                
+                KMBProgressHide;
             }];
         }
         

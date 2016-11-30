@@ -55,19 +55,16 @@
         }];
 
     } failBlock:^{
-        
     }];
        _bootmScrollView.contentSize = CGSizeMake(KScreenWidth, KScreenHeight-64-49);
 }
 
 - (void)getRiderList{
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlRiderHeadList parameters:@{@"cateid":@"8"} sucBlock:^(id responseObject) {
-
         NSArray *array = responseObject[@"data"];
         _topicNum = responseObject[@"wd_count"];
         [self createRiderViewWith:array];
     } failBlock:^{
-        
     }];
 }
 
