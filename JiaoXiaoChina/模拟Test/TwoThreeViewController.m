@@ -284,6 +284,7 @@
 
     WebViewController *vc = [[WebViewController alloc]init];
     vc.url = @"http://api.51jiaxiao.com/Naben/index.html";
+    vc.navTitle = @"待修改链接";
     [self.delegate doPushWithVc:vc];
     
 }

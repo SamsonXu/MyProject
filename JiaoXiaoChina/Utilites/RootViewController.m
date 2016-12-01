@@ -31,7 +31,7 @@
     
     _bootmScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight-64-49-30)];
     _bootmScrollView.contentSize = CGSizeMake(KScreenWidth, 800);
-    _bootmScrollView.backgroundColor = KColorRGB(235, 235, 241);
+    _bootmScrollView.backgroundColor = KGrayColor;
     [self.view addSubview:_bootmScrollView];
 }
 

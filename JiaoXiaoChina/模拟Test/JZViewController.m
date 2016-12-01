@@ -15,6 +15,8 @@
 @interface JZViewController ()<JZViewDelegate>
 {
     NSString *_topicNum;
+    NSArray *_titleArr1;
+    NSArray *_titleArr2;
 }
 @end
 
@@ -28,22 +30,23 @@
 }
 
 - (void)createUI{
-    NSArray *array1 = @[@"领照需知",@"领照时间与地点",@"驾照年审",@"驾照遗失挂失",@"驾照换证"];
-    NSArray *array2 = @[@"新手上路",@"上路前注意事项",@"行驶时注意事项",@"停车时注意事项",@"实用驾驶技巧"];
+    _titleArr1 = @[@"领照需知",@"领照时间与地点",@"驾照年审",@"驾照遗失挂失",@"驾照换证"];
+    _titleArr2 = @[@"新手上路",@"上路前注意事项",@"行驶时注意事项",@"停车时注意事项",@"实用驾驶技巧"];
     _bootmScrollView.showsVerticalScrollIndicator = NO;
     _bootmScrollView.showsHorizontalScrollIndicator = NO;
-    JZView *view1 = [[JZView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 142) image:@"driving_lingjiazhao" titles:array1];
+    JZView *view1 = [[JZView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 142) image:@"driving_lingjiazhao" titles:_titleArr1];
     view1.delegate = self;
     view1.flag = 0;
     [_bootmScrollView addSubview:view1];
     
-    JZView *view2 = [[JZView alloc]initWithFrame:CGRectMake(0, 150, KScreenWidth, 142) image:@"driving_xinshou" titles:array2];
+    JZView *view2 = [[JZView alloc]initWithFrame:CGRectMake(0, 150, KScreenWidth, 142) image:@"driving_xinshou" titles:_titleArr2];
     view2.flag = 1;
     view2.delegate = self;
     [_bootmScrollView addSubview:view2];
     KWS(ws);
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlAdver1 parameters:@{@"id":@"78"} sucBlock:^(id responseObject) {
         UIImageView *imageView = [MyControl imageViewWithFram:CGRectMake(0, 0, 0, 0) url:@""];
+        imageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgViewTapClick:)];
         [imageView addGestureRecognizer:tap];
         imageView.backgroundColor = KColorRGB(19, 153, 229);
@@ -56,7 +59,7 @@
 
     } failBlock:^{
     }];
-       _bootmScrollView.contentSize = CGSizeMake(KScreenWidth, KScreenHeight-64-49);
+       _bootmScrollView.contentSize = CGSizeMake(KScreenWidth, KScreenHeight-64-49-29);
 }
 
 - (void)getRiderList{
@@ -148,12 +151,14 @@
     if (flag == 0) {
         WebViewController *vc = [[WebViewController alloc]init];
         vc.url = urlArr[tag];
+        vc.navTitle = _titleArr1[tag+1];
         [self.delegate doPush:vc];
         
     }else if (flag == 1){
         if (tag < 3) {
             WebViewController *vc = [[WebViewController alloc]init];
             vc.url = urlArr[tag+4];
+            vc.navTitle = _titleArr2[tag+1];
             [self.delegate doPush:vc];
         }else{
             DTJQOneController *vc = [[DTJQOneController alloc]init];
@@ -168,6 +173,7 @@
 - (void)imgViewTapClick:(UITapGestureRecognizer *)tap{
     WebViewController *vc = [[WebViewController alloc]init];
     vc.url = @"";
+    vc.navTitle = @"待添加链接";
     [self.delegate doPush:vc];
 }
 

@@ -97,7 +97,7 @@
     }];
     //间隔线
     UILabel *midLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    midLabel.backgroundColor = KColorRGB(235, 235, 241);
+    midLabel.backgroundColor = KGrayColor;
     [view addSubview:midLabel];
     [midLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(btn1.mas_right);

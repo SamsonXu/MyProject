@@ -233,7 +233,11 @@
         
     }else{
         
-        [self.delegate changeCityName:_resultArray[indexPath.row][@"areaname"]];
+        if (_isInfo) {
+            [self.infoDelegate changeCityInfo:@[_resultArray[indexPath.row][@"id"],_resultArray[indexPath.row][@"areaname"]]];
+        }else{
+            [self.delegate changeCityName:_resultArray[indexPath.row][@"areaname"]];
+        }
         _searchCtrl.active = NO;
     }
     

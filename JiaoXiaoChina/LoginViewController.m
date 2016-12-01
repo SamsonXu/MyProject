@@ -148,20 +148,25 @@
                     NSHTTPCookieStorage *cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
                     NSHTTPCookie *cookie = [[cookieJar cookies]lastObject];
                     [DefaultManager addValue:cookie.value key:@"token"];
+                    NSLog(@"defaultToken:---%@",[DefaultManager getValueOfKey:@"token"]);
                     //获取用户信息
                     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlInfo parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
+                        
                         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"data"]];
                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                         [defaults setObject:dict forKey:@"userInfo"];
                         
+                        if (self.isPush) {
+                            [self.navigationController popToRootViewControllerAnimated:YES];
+                        }else{
+                            [self.sideMenuViewController setContentViewController:[MyTabBarController shareTabBar]];
+                        }
+                        
                     } failBlock:^{
                         
                     }];
-                    if (self.isPush) {
-                        [self.navigationController popToRootViewControllerAnimated:YES];
-                    }else{
-                         [self.sideMenuViewController setContentViewController:[MyTabBarController shareTabBar]];
-                    }
+
+                    
                 }
                
             } failBlock:^{

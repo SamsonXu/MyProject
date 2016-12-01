@@ -227,12 +227,14 @@
         LoginViewController *vc = [[LoginViewController alloc]init];
         vc.isPush = YES;
         [self.navigationController pushViewController:vc animated:YES];
+        self.tabBarController.tabBar.hidden = YES;
     }else if (indexPath.row == 0) {
         
         JournalViewController *vc = [[JournalViewController alloc]init];
         [self.navigationController pushViewController:vc animated:YES];
+        self.tabBarController.tabBar.hidden = YES;
     }
-    self.tabBarController.tabBar.hidden = YES;
+    
 }
 
 - (void)didReceiveMemoryWarning {

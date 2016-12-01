@@ -199,7 +199,7 @@
     [UIView animateWithDuration:time animations:^{
         CGRect frame=_commentView.frame;
         //将view向上移键盘的高度
-        frame.origin.y-=rect.size.height;
+        frame.origin.y = rect.origin.y-50;
         _commentView.frame=frame;
     }];
 

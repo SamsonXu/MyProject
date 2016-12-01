@@ -111,10 +111,15 @@
     lineLabel.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:lineLabel];
     
-    _textView = [[UITextView alloc]initWithFrame:CGRectMake(0, 105, KScreenWidth, 200)];
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 105, KScreenWidth, 200)];
+    backView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:backView];
+    
+    _textView = [[UITextView alloc]initWithFrame:CGRectMake(5, 5, KScreenWidth-10, 190)];
     _textView.delegate = self;
-    [self.view addSubview:_textView];
-    _plachLabel = [MyControl labelWithTitle:@"说点什么吧···" fram:CGRectMake(0, 0, 120, 20) fontOfSize:14];
+    [backView addSubview:_textView];
+    
+    _plachLabel = [MyControl labelWithTitle:@"说点什么吧···" fram:CGRectMake(5, 5, 120, 20) fontOfSize:14];
     _plachLabel.textColor = [UIColor grayColor];
     [_textView addSubview:_plachLabel];
     

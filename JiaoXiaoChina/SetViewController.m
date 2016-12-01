@@ -238,7 +238,7 @@
     }else if (indexPath.row == 2){
         
         _currentPage = 2;
-        _pickArray = @[@"保密",@"男",@"女"];
+        _pickArray = @[@"男",@"女"];
         [self showPickView];
     }else if (indexPath.row == 3){
         
@@ -262,35 +262,29 @@
 - (void)pickViewShow{
     //半透明视图
     _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, KScreenWidth, KScreenHeight-64)];
-    _backView.backgroundColor = [UIColor clearColor];
+    _backView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
     [self.view addSubview:_backView];
     
-    _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight-64)];
-    _topView.backgroundColor = [UIColor blackColor];
-    [_backView addSubview:_topView];
-    _topView.alpha = 0;
-    
     //pickView背景视图
-    _moveView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenHeight, KScreenWidth, 330)];
-    _moveView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1];
+    _moveView = [[UIView alloc]initWithFrame:CGRectMake(0, KScreenHeight, KScreenWidth, 340)];
+    _moveView.backgroundColor = KGrayColor;
     [_backView addSubview:_moveView];
     //按钮
     NSArray *titles = @[@"取消",@"确定"];
     for (int i = 0; i < titles.count; i++) {
         
-        UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 0, 30, 30) title:titles[i] imageName:nil tag:100+i];
+        UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 0, 40, 40) title:titles[i] imageName:nil tag:100+i];
         btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        if (i == 0) {
-            btn.frame = CGRectMake(0, 0, 50, 30);
-        }else if (i == 1){
-            btn.frame = CGRectMake(KScreenWidth-40, 0, 40, 30);
+        
+        if (i == 1){
+            btn.frame = CGRectMake(KScreenWidth-40, 0, 40, 40);
             [btn setTitleColor:KColorSystem forState:UIControlStateNormal];
         }
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [_moveView addSubview:btn];
     }
     
-    _pickView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 30, KScreenWidth, 300)];
+    _pickView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, KScreenWidth, 300)];
     _pickView.delegate = self;
     _pickView.dataSource = self;
     _pickView.alpha = 1;
@@ -310,9 +304,10 @@
         [self backViewHid];
     }else if (index == 1){
         NSString *str;
-        if ([_currentSex isEqualToString:@"保密"]) {
-            str = @"0";
-        }else if ([_currentSex isEqualToString:@"男"]){
+//        if ([_currentSex isEqualToString:@"保密"]) {
+//            str = @"0";
+//        }else
+        if ([_currentSex isEqualToString:@"男"]){
             str = @"1";
         }else if ([_currentSex isEqualToString:@"女"]){
             str = @"2";
@@ -337,7 +332,7 @@
     [_pickView reloadAllComponents];
     [UIView animateWithDuration:0.5 animations:^{
         _topView.alpha = 0.3;
-        _moveView.frame = CGRectMake(0, KScreenHeight-330, KScreenWidth, 330);
+        _moveView.frame = CGRectMake(0, KScreenHeight-340, KScreenWidth, 340);
         _backView.alpha = 1;
     }];
 }
