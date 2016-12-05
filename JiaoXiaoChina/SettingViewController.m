@@ -112,6 +112,7 @@
         [DefaultManager removeValueOfKey:@"token"];
         [DefaultManager removeValueOfKey:@"userInfo"];
         [DefaultManager removeValueOfKey:KTrueFaults];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"logoff" object:nil];
         
     }];
     [alertCtrl addAction:action1];

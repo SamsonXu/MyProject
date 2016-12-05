@@ -17,6 +17,8 @@
 @interface LeftScrollViewController ()<UITableViewDataSource, UITableViewDelegate,UMSocialUIDelegate>
 {
     NSArray *_imageArr;
+    UIImageView *_headImageView;//头像
+    UILabel *_nameLabel;//昵称
 }
 @property (nonatomic, copy) NSArray *lefs;
 @property (nonatomic, assign) NSInteger previousRow;
@@ -44,8 +46,26 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeUserInfo) name:@"updateUserInfo" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logoff) name:@"logoff" object:nil];
     [self createHeaderView];
     [self createFootView];
+}
+
+- (void)logoff{
+    self.hasLogin = NO;
+    _headImageView.image = [UIImage imageNamed:@"driving_header"];
+    _nameLabel.text = @"点击登录";
+    _nameLabel.textColor = KColorSystem;
+}
+
+- (void)changeUserInfo{
+    self.hasLogin = YES;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"]];
+    NSString *str = dict[@"headimg"];
+    [_headImageView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
+    _nameLabel.text = dict[@"nickname"];
+    _nameLabel.textColor = [UIColor blackColor];
 }
 
 //设置头部视图
@@ -60,59 +80,60 @@
     NSDictionary *infoDict =  [defaults objectForKey:@"userInfo"];
     
     //头像
-    UIImageView *imageView = [UIImageView new];
-    imageView.tag = 50;
-    imageView.layer.cornerRadius = 35;
-    imageView.layer.masksToBounds = YES;
-    [btn addSubview:imageView];
+    _headImageView = [UIImageView new];
+    _headImageView.tag = 50;
+    _headImageView.layer.cornerRadius = 35;
+    _headImageView.layer.masksToBounds = YES;
+    [btn addSubview:_headImageView];
     
     //用户名
-    UILabel *nameLabel = [MyControl labelWithTitle:@"点击登录" fram:CGRectMake(0, 0, 0, 0) color:[UIColor whiteColor] fontOfSize:17 numberOfLine:1];
-    nameLabel.tag = 51;
-    [btn addSubview:nameLabel];
+    _nameLabel = [MyControl labelWithTitle:@"点击登录" fram:CGRectMake(0, 0, 0, 0) color:[UIColor whiteColor] fontOfSize:17 numberOfLine:1];
+    _nameLabel.tag = 51;
+    [btn addSubview:_nameLabel];
     
+    UIImage *image = [UIImage imageNamed:@"driving_header"];
     if (self.hasLogin) {
-        nameLabel.text = infoDict[@"nickname"];
-        nameLabel.textColor = [UIColor blackColor];
-        UIImage *image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
-        imageView.image = image;
+        _nameLabel.text = infoDict[@"nickname"];
+        _nameLabel.textColor = [UIColor blackColor];
+//        UIImage *image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
+        [_headImageView sd_setImageWithURL:[NSURL URLWithString:infoDict[@"headImage"]] placeholderImage:image];
     }else{
-        nameLabel.text = @"点击登录";
-        nameLabel.textColor = KColorSystem;
-        imageView.image = [UIImage imageNamed:@"driving_header"];
+        _nameLabel.text = @"点击登录";
+        _nameLabel.textColor = KColorSystem;
+        _headImageView.image = image;
     }
-    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(btn);
         make.centerY.equalTo(btn).offset(20);
         make.size.mas_equalTo(CGSizeMake(70, 70));
     }];
-    [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(btn);
-        make.top.equalTo(imageView.mas_bottom).offset(10);
+        make.top.equalTo(_headImageView.mas_bottom).offset(10);
         make.height.mas_equalTo(20);
     }];
-    [defaults addObserver:self forKeyPath:@"userInfo" options:NSKeyValueObservingOptionNew context:nil];
+//    [defaults addObserver:self forKeyPath:@"userInfo" options:NSKeyValueObservingOptionNew context:nil];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
-    
-    if (![DefaultManager getValueOfKey:keyPath]) {
-        self.hasLogin = NO;
-        UIImageView *imageView = [self.view viewWithTag:50];
-        UILabel *label = [self.view viewWithTag:51];
-        label.text = @"点击登录";
-        label.textColor = KColorSystem;
-        imageView.image = [UIImage imageNamed:@"driving_header"];
-    }else{
-        self.hasLogin = YES;
-        UIImageView *imageView = [self.view viewWithTag:50];
-        imageView.image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfphoto.jpg"]];
-        UILabel *label = [self.view viewWithTag:51];
-        label.text = change[@"new"][@"nickname"];
-        label.textColor = [UIColor blackColor];
-    }
-    [_tableView reloadData];
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+//    
+//    if (![DefaultManager getValueOfKey:keyPath]) {
+//        self.hasLogin = NO;
+//        UIImageView *imageView = [self.view viewWithTag:50];
+//        UILabel *label = [self.view viewWithTag:51];
+//        label.text = @"点击登录";
+//        label.textColor = KColorSystem;
+//        imageView.image = [UIImage imageNamed:@"driving_header"];
+//    }else{
+//        self.hasLogin = YES;
+//        UIImageView *imageView = [self.view viewWithTag:50];
+//        imageView.image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfphoto.jpg"]];
+//        UILabel *label = [self.view viewWithTag:51];
+//        label.text = change[@"new"][@"nickname"];
+//        label.textColor = [UIColor blackColor];
+//    }
+//    [_tableView reloadData];
+//}
 
 - (void)createFootView{
     

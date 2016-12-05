@@ -56,7 +56,9 @@
     //网络请求数据
     if ([DefaultManager getValueOfKey:@"token"]) {
         [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlInfo parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
-            NSDictionary *dict = responseObject[@"data"];
+            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"data"]];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:dict forKey:@"userInfo"];
             NSString *imgUrl = dict[@"headimg"];
             UIImage *image;
             if (imgUrl.length == 0) {
@@ -68,6 +70,8 @@
             [userDefaults setObject:dict[@"is_cb"] forKey:KJZLX];
             [userDefaults setObject:dict forKey:@"userInfo"];
             [userDefaults synchronize];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"updateUserInfo" object:nil];
+            
         } failBlock:^{
             
         }];

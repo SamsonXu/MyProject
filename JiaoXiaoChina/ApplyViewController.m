@@ -55,6 +55,8 @@
     NSString *_time;
     //现金券
     UIView *_cashView;
+    //导航栏左边按钮图片
+    UIImageView *_headImageView;
 }
 @end
 
@@ -74,7 +76,20 @@
     _advArray = [[NSMutableArray alloc]init];
     _classArray = [[NSMutableArray alloc]init];
     _limitSaleArray = [[NSMutableArray alloc]init];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeUserInfo) name:@"updateUserInfo" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logoff) name:@"logoff" object:nil];
     [self createUI];
+}
+
+- (void)logoff{
+    _headImageView.image = [UIImage imageNamed:@"driving_header"];
+}
+
+- (void)changeUserInfo{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"]];
+    NSString *str = dict[@"headimg"];
+    [_headImageView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:nil];
 }
 
 - (void)requestData{
@@ -137,11 +152,13 @@
 - (void)createUI{
     
     [self createNavView];
+    
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, KScreenWidth, KScreenHeight-64-49) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [MyControl setExtraCellLineHidden:_tableView];
     [self.view addSubview:_tableView];
+    
     _cashView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     _cashView.backgroundColor = [UIColor colorWithWhite:0.3 alpha:0.2];
     _cashView.hidden = YES;
@@ -435,25 +452,25 @@
     leftView.image = [UIImage imageNamed:@"navigationbar_icon_menu"];
     [leftbtn addSubview:leftView];
     
-    UIImageView *headView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 30, 30)];
-    headView.layer.cornerRadius = 15;
-    headView.layer.masksToBounds = YES;
-    [leftbtn addSubview:headView];
+    _headImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 30, 30)];
+    _headImageView.layer.cornerRadius = 15;
+    _headImageView.layer.masksToBounds = YES;
+    [leftbtn addSubview:_headImageView];
     [leftbtn addTarget:self action:@selector(leftClick:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
     
     if (![DefaultManager getValueOfKey:@"token"]) {
         
-        headView.image = [UIImage imageNamed:@"driving_header"];
+        _headImageView.image = [UIImage imageNamed:@"driving_header"];
     }else{
         
     NSDictionary *dict = [[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"];
     if ([dict[@"headimg"] length] == 0) {
-        headView.image = [UIImage imageNamed:@"f0"];
+        _headImageView.image = [UIImage imageNamed:@"f0"];
     }else{
         
         UIImage *image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
-        headView.image = image;
+        _headImageView.image = image;
     }
     }
     [self addBtnWithTitle:nil imageName:@"hb" navBtn:KNavBarRight];

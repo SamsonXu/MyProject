@@ -162,6 +162,7 @@
                             [self.sideMenuViewController setContentViewController:[MyTabBarController shareTabBar]];
                         }
                         
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"updateUserInfo" object:nil];
                     } failBlock:^{
                         
                     }];

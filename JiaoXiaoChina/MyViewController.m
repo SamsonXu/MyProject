@@ -14,6 +14,8 @@
 @interface MyViewController ()
 {
     NSDictionary *_dict;
+    UIImageView *_headImageView;//头像
+    UIButton *_rightBtn;//导航栏右按钮
 }
 @end
 
@@ -29,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self createUI];
 }
 
@@ -66,28 +69,43 @@
         make.height.mas_equalTo(@220);
     }];
     
-    UIImageView *headView = [UIImageView new];
-    headView.image = [UIImage imageNamed:@"f0"];
-    headView.layer.cornerRadius = 50;
-    headView.layer.masksToBounds = YES;
+    _headImageView = [UIImageView new];
+    _headImageView.image = [UIImage imageNamed:@"f0"];
+    _headImageView.layer.cornerRadius = 50;
+    _headImageView.layer.masksToBounds = YES;
     
     UILabel *nameLabel = [MyControl labelWithTitle:@"未登录" fram:CGRectMake(0, 0, 0, 0) color:[UIColor whiteColor] fontOfSize:17 numberOfLine:1];
     nameLabel.textColor = KColorSystem;
     
     UIImageView *sexView = [UIImageView new];
     
+    UILabel *label = [UILabel new];
+    label.text = @"编辑";
+    _rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rightBtn.frame = CGRectMake(0, 0, 35, 35);
+    
+    [self addBtnWithTitle:label imageName:nil navBtn:KNavBarRight];
+    label.font = [UIFont systemFontOfSize:16];
+    label.textColor = [UIColor whiteColor];
+    [_rightBtn addSubview:label];
+    _rightBtn.hidden = YES;
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(_rightBtn).insets(UIEdgeInsetsMake(10, 0, 0, 0));
+    }];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:_rightBtn];
+    [_rightBtn addTarget:self action:@selector(rightClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     if ([DefaultManager getValueOfKey:@"token"]) {
         
-        UILabel *label = [UILabel new];
-        label.text = @"编辑";
-        [self addBtnWithTitle:label imageName:nil navBtn:KNavBarRight];
+        _rightBtn.hidden = NO;
+        
         _dict = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"]];
         NSString *str = _dict[@"headimg"];
         
         if (str.length == 0) {
-            headView.image = [UIImage imageNamed:@"f0"];
+            _headImageView.image = [UIImage imageNamed:@"f0"];
         }else{
-            headView.image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
+            _headImageView.image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
            
         }
         NSString *imgStr;
@@ -101,11 +119,11 @@
         nameLabel.text = _dict[@"nickname"];
     }
     
-    [view addSubview:headView];
+    [view addSubview:_headImageView];
     [view addSubview:nameLabel];
     [view addSubview:sexView];
     
-    [headView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(imageView);
         make.centerY.equalTo(imageView).offset(-20);
         make.size.mas_equalTo(CGSizeMake(100, 100));
@@ -113,7 +131,7 @@
     
     [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(view);
-        make.top.equalTo(headView.mas_bottom).offset(30);
+        make.top.equalTo(_headImageView.mas_bottom).offset(30);
         make.height.mas_equalTo(20);
     }];
     
