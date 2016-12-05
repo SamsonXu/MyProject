@@ -110,7 +110,7 @@
 
 - (void)createHeadView{
     UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 171)];
-    headView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    headView.backgroundColor = KGrayColor;
     UIView *titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 40)];
     titleView.backgroundColor = [UIColor whiteColor];
     [headView addSubview:titleView];
@@ -176,7 +176,7 @@
     _pageCtrl = [UIPageControl new];
     _pageCtrl.numberOfPages = _colSection;
     _pageCtrl.currentPage = 0;
-    _pageCtrl.pageIndicatorTintColor = [UIColor grayColor];
+    _pageCtrl.pageIndicatorTintColor = KColorRGB(230, 230, 230);
     _pageCtrl.currentPageIndicatorTintColor = KColorSystem;
     [_collectView addSubview:_pageCtrl];
     [_pageCtrl mas_makeConstraints:^(MASConstraintMaker *make) {

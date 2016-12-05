@@ -102,7 +102,7 @@
     UILabel *label = [MyControl boldLabelWithTitle:@"发布" fram:CGRectMake(0, 0, 40, 40) color:[UIColor whiteColor] fontOfSize:14];
     [self addBtnWithTitle:label imageName:nil navBtn:KNavBarRight];
     
-    _topicField = [[UITextField alloc]initWithFrame:CGRectMake(0, 74, KScreenWidth, 20)];
+    _topicField = [[UITextField alloc]initWithFrame:CGRectMake(10, 74, KScreenWidth-10, 20)];
     _topicField.borderStyle = UITextBorderStyleNone;
     _topicField.font = [UIFont systemFontOfSize:14];
     _topicField.placeholder = @"标题(可自选)";

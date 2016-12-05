@@ -29,9 +29,15 @@
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, KScreenWidth, KScreenHeight-64) style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    _tableView.backgroundColor = KGrayColor;
+    [MyControl setExtraCellLineHidden:_tableView];
     [self.view addSubview:_tableView];
     [self addBtnWithTitle:nil imageName:KBtnBack navBtn:KNavBarLeft];
     [_tableView registerNib:[UINib nibWithNibName:@"AnswerCell" bundle:nil] forCellReuseIdentifier:@"myCell"];
+//    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 20)];
+//    headView.backgroundColor = KGrayColor;
+//    _tableView.tableHeaderView = headView;
+    
     NSString *str;
     if (_flag == 0) {
         self.title = @"我的错题";
@@ -157,9 +163,16 @@
     self.remove = sender.isOn;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 10;
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    headView.backgroundColor = KGrayColor;
+    return headView;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_flag == 0) {
