@@ -137,12 +137,14 @@
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlCommentSecond parameters:@{@"pid":_replyId,@"token":[DefaultManager getValueOfKey:@"token"],@"content":textView.text} sucBlock:^(id responseObject) {
 
                     [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
+                    
                     if ([responseObject[@"status"] integerValue] == 1) {
                         UITextView *textView = [_commentView viewWithTag:11];
                         textView.text = nil;
                         _plachLabel.hidden = NO;
                         [self requestData];
                     }
+                    
                 } failBlock:^{
                     
                 }];
@@ -150,12 +152,14 @@
                 
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlComment parameters:@{@"pid":_pid,@"token":[DefaultManager getValueOfKey:@"token"],@"content":textView.text} sucBlock:^(id responseObject) {
                     [self showAlertViewWith:@[responseObject[@"msg"],@"确定"] sel:nil];
+                    
                     if ([responseObject[@"status"] integerValue] == 1) {
                         UITextView *textView = [_commentView viewWithTag:11];
                         textView.text = nil;
                         _plachLabel.hidden = NO;
                         [self requestData];
                     }
+                    
                 } failBlock:^{
                     
                 }];
@@ -167,6 +171,7 @@
 - (void)changeFavoNum{
     UIButton *btn = [self.view viewWithTag:10];
     NSString *urlStr;
+    
     if (btn.selected) {
         btn.selected = NO;
         urlStr = KUrlFavDel;
@@ -251,6 +256,7 @@
         cell.headImgView.layer.masksToBounds = YES;
         cell.nameLabel.text = dict[@"nickname"];
         return cell;
+        
     }else if (indexPath.section == 1){
 
         RiderCellTwo *cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
@@ -261,6 +267,7 @@
         cell.model = _commentArr[indexPath.row];
             cell.delegate = self;
         return cell;
+        
     }
     return nil;
 }
@@ -268,17 +275,21 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
     if (section == 0) {
+        
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 40)];
         view.backgroundColor = [UIColor whiteColor];
         NSInteger num = 4;
+        
         if (_favoriteArr.count == 0) {
             return nil;
         }
+        
         if (_favoriteArr.count < 4) {
             num = _favoriteArr.count;
         }
         
         UIButton *lastBtn = nil;
+        
         for (int i = 0; i < _favoriteArr.count; i++) {
             UIButton *btn = [UIButton new];
             btn.layer.cornerRadius = 15;
@@ -288,11 +299,13 @@
             [view addSubview:btn];
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(view);
+                
                 if (lastBtn) {
                     make.left.equalTo(lastBtn.mas_right).offset(10);
                 }else{
                     make.left.equalTo(view).offset(10);
                 }
+                
                 make.height.width.mas_equalTo(30);
             }];
             lastBtn = btn;
@@ -316,6 +329,7 @@
             make.height.mas_equalTo(20);
         }];
         return view;
+        
     }
     return nil;
 }
@@ -325,6 +339,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    
     if (section == 0) {
         if (_favoriteArr.count == 0) {
             return 0;
@@ -360,6 +375,7 @@
 }
 
 - (void)rightClick:(UIButton *)btn{
+    
     if (_isOthers) {
         KWS(ws);
         UIImage *image = [[UMSocialScreenShoterDefault screenShoter] getScreenShot];
@@ -410,6 +426,7 @@
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"id":_delComId,@"token":[DefaultManager getValueOfKey:@"token"]} options:NSJSONWritingPrettyPrinted error:nil];
     NSString *str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
     [[HttpManager shareManager]requestDataWithMethod:KUrlPut urlString:KUrlCommentDel parameters:str sucBlock:^(id responseObject) {
         if ([responseObject[@"status"] integerValue] == 1) {
             [self requestData];
@@ -419,6 +436,7 @@
     } failBlock:^{
         
     }];
+    
 }
 
 - (void)replyWithModel:(CommentModel *)model{

@@ -43,6 +43,7 @@
 
 @implementation AnswerViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -249,27 +250,36 @@
 
 //导航栏按钮点击事件
 - (void)itemClick:(UIButton *)btn{
+    
     NSInteger index = btn.tag-100;
+    
     if (_type !=6 && _type != 7) {
+        
         if (index == 0) {
             _backView.hidden = NO;
         }else if(index == 1){
-            
+            KWS(ws);
+            UIImage *image = [[UMSocialScreenShoterDefault screenShoter] getScreenShot];
+            [MyControl UMSocialImageWithImage:image ws:ws];
         }else if (index == 3){
             [UIView animateWithDuration:0.5 animations:^{
                 _sheetView.frame = CGRectMake(0, 80+64, KScreenWidth, self.view.frame.size.height-80-64);
                 _sheetView->_backView.alpha = 0.8;
             }];
         }
+        
     }else{
+        
         if (index == 0) {
             _backView.hidden = NO;
         }else if (index == 1){
             [self showAlertViewWith:@[@"温馨提示",[NSString stringWithFormat:@"您还有%ld道题未做，确定交卷吗？",_hasSolve],@"继续答题",@"交卷"] sel:@selector(alertBtnClick)];
         }
+        
     }
     //点击收藏
     if (index == 2){
+        
         NSString *str1;
         NSString *str2;
         AnswerModel *model = _modelArr[_topicView.currentPage];
@@ -284,14 +294,17 @@
             str2 = @"已收藏";
             [DefaultManager addCollectQuestion:model.pid];
         }
+        
         UIImageView *imageView = btn.subviews[0];
         UILabel *label = btn.subviews[1];
         imageView.image = [UIImage imageNamed:str1];
         label.text = str2;
+        
     }
 }
 //交卷弹出提示框
 - (void)alertBtnClick{
+    
     [_timer invalidate];
     NSInteger scroe = 100/_modelArr.count*_trueAns;
     NSString *timeStr = [NSString stringWithFormat:@"%02ld:%02ld",_useTime/60,_useTime%60];
@@ -312,6 +325,7 @@
    
     //左侧label
     NSArray *titles = @[@"展开答案解释",@"考友分析",@"夜间模式",@"字体大小"];
+    
     for (int i = 0; i < titles.count; i++) {
         UILabel *label = [MyControl labelWithTitle:titles[i] fram:CGRectMake(10, 10+50*i, 100, 20) fontOfSize:16];
         [setView addSubview:label];
@@ -324,13 +338,17 @@
    
     //字体大小
     NSArray *fontArray = @[@"A小号",@"A标准",@"A大号"];
+    
     for (int i = 0; i < fontArray.count; i++) {
+        
         UIButton *btn = [MyControl buttonWithFram:CGRectMake(KScreenWidth-210+70*i, 160, 70, 20) title:fontArray[i] imageName:nil tag:54+i];
         [btn addTarget:self action:@selector(setViewClick:) forControlEvents:UIControlEventTouchUpInside];
+        
         if (i == 1) {
             btn.selected = YES;
             _lastBtn = btn;
         }
+        
         btn.titleLabel.font = [UIFont systemFontOfSize:12+2*i];
         [btn setTitleColor:KColorSystem forState:UIControlStateSelected];
         [setView addSubview:btn];
@@ -338,17 +356,23 @@
     
     //右侧开关
     for (int i = 0; i < 3; i++) {
+        
         UISwitch *mySwitch = [[UISwitch alloc]initWithFrame:CGRectMake(KScreenWidth-80, 10+50*i, 60, 20)];
         mySwitch.tag = 30+i;
+        
         if (i == 1) {
             [mySwitch setOn:YES];
         }
+        
         if (i == 2 && [[DefaultManager getValueOfKey:@"nightModel"] isEqualToString:@"yes"]) {
                 [mySwitch setOn:YES];
         }
+        
         [mySwitch addTarget:self action:@selector(switchClick:) forControlEvents:UIControlEventValueChanged];
         [setView addSubview:mySwitch];
+        
     }
+    
     _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     _backView.backgroundColor = [UIColor colorWithWhite:0.7 alpha:0.5];
     [_backView addSubview:setView];
@@ -371,42 +395,53 @@
     btn.selected = YES;
     _lastBtn.selected = NO;
     _lastBtn = btn;
+    
     if (index == 4 || index == 5 || index == 6){
         
         [_topicView changeFontWithNum:btn.titleLabel.font.pointSize];
         [self.delegate passValue:btn.titleLabel.font.pointSize];
     }
+    
 }
 
 //开关点击事件
 - (void)switchClick:(UISwitch *)comSwitch{
+    
     NSString *str;
     NSInteger index = comSwitch.tag-30;
+    
     if (index == 0) {
         [_topicView showAns:comSwitch.isOn];
     }else if (index == 1) {
+        
         if (comSwitch.isOn) {
             str = @"评论已显示";
         }else{
             str = @"评论已隐藏";
         }
         _comLabel.text = str;
+        
     }else if (index == 2){
+        
         if (comSwitch.isOn) {
             [DefaultManager addValue:@"yes" key:@"nightModel"];
         }else{
             [DefaultManager addValue:@"no" key:@"nightModel"];
         }
+        
     }
     
 }
 
 - (void)createSheetView{
+    
     _sheetView = [[SheetView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, KScreenWidth, self.view.frame.size.height-80) view:self.view number:(int)_modelArr.count];
+    
     if (_type == 6 || _type == 7) {
         _sheetView.frame = CGRectMake(0, KScreenHeight-64, KScreenWidth, self.view.frame.size.height-80);
         _sheetView.isTest = 1;
     }
+    
     _sheetView.delegate = self;
     [self.view addSubview:_sheetView];
 }
@@ -420,6 +455,7 @@
 
 //点击题号改变当前题目数
 - (void)changeBtnNum:(NSInteger)index{
+    
     if (_type !=6 && _type != 7) {
         UILabel *label = _currentBtn.subviews[1];
         label.text = [NSString stringWithFormat:@"%ld/%ld",index+1,_modelArr.count];
@@ -429,7 +465,9 @@
     NSArray *colArr = [DefaultManager getCollectQuestion];
     UIImageView *imageView = _colBtn.subviews[0];
     UILabel *label1 = _colBtn.subviews[1];
+    
     for (NSString *num in colArr) {
+        
         if (num.integerValue == curtModel.pid) {
             _colBtn.selected = YES;
             imageView.image = [UIImage imageNamed:@"collect_h"];
@@ -440,15 +478,18 @@
             imageView.image = [UIImage imageNamed:@"collect"];
             label1.text = @"收藏";
         }
+        
     }
 }
 #pragma mark---TopicViewDelegate
 //滑动改变显示的当前题目数
 - (void)changePage:(NSInteger)index{
+    
     if (_type !=6 && _type != 7) {
         UILabel *label = _currentBtn.subviews[1];
         label.text = [NSString stringWithFormat:@"%ld/%ld",index+1,_modelArr.count];
     }
+    
     AnswerModel *curtModel = _modelArr[_topicView.currentPage];
     NSArray *colArr = [DefaultManager getCollectQuestion];
 
@@ -456,6 +497,7 @@
     UILabel *label1 = _colBtn.subviews[1];
     
     for (NSString *num in colArr) {
+        
         if (num.integerValue == curtModel.pid) {
             _colBtn.selected = YES;
             imageView.image = [UIImage imageNamed:@"collect_h"];
@@ -466,16 +508,20 @@
             imageView.image = [UIImage imageNamed:@"collect"];
             label1.text = @"收藏";
         }
+        
     }
 }
 
 - (void)changeNumOfItem:(BOOL)isTrue{
+    
     if (_hasSolve == 0) {
         return;
     }
+    
     if (isTrue) {
         _trueAns++;
     }
+    
     _hasSolve--;
 }
 

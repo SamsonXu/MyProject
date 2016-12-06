@@ -293,13 +293,16 @@
 }
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController{
+    
     [_resultArray removeAllObjects];
     NSString *putStr = searchController.searchBar.text;
     NSInteger length = putStr.length;
+    
     if (length == 0) {
         [_tableView reloadData];
         return;
     }
+    
     for (NSArray *array in _dataArray) {
         
         for (NSDictionary *dict in array) {

@@ -67,6 +67,7 @@
 }
 
 - (void)btnClick:(UIButton *)btn{
+    
     if (btn.tag == 100) {
         [self showAlertViewWith:@[@"咨询驾校中国专属学车顾问",[NSString stringWithFormat:@"%@",_model.tel],@"取消",@"确定"] sel:@selector(telephone)];
         

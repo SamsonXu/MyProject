@@ -63,7 +63,9 @@
     
     NSArray *images = @[@"",@""];
     NSArray *titles = @[@"驾校详情",@"电话咨询"];
+    
     for (int i = 0; i < images.count; i++) {
+        
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(KScreenWidth/2*i, KScreenHeight-40, KScreenWidth/2, 40);
         btn.tag = 100+i;
@@ -85,6 +87,7 @@
             make.left.equalTo(imageView.mas_right).offset(10);
             make.height.mas_equalTo(20);
         }];
+        
     }
 }
 
@@ -160,6 +163,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
     if (section == 0) {
         return 0.01;
     }
@@ -186,6 +190,7 @@
             make.height.mas_equalTo(20);
         }];
         return view;
+        
     }else if (section == 2){
         
         if (_commentArray.count > 3) {
@@ -204,16 +209,22 @@
     
     NSInteger index = btn.tag-100;
     if (index == 0) {
+        
         WebViewController *vc = [[WebViewController alloc]init];
         vc.navTitle = _model.dname;
         vc.url = [NSString stringWithFormat:@"%@?id=%@",KUrlDriveDetail,_model.pid];
         [self.navigationController pushViewController:vc animated:YES];
+        
     }else if (index == 1){
+        
         [self showAlertViewWith:@[@"咨询驾校中国专业学车顾问",[NSString stringWithFormat:@"%@",_model.tel],@"取消",@"确定"] sel:@selector(telephone)];
+        
     }else if (index == 2){
+        
         CommentListController *vc = [[CommentListController alloc]init];
         vc.commentArray = _commentArray;
         [self.navigationController pushViewController:vc animated:YES];
+        
     }
     
 }
@@ -234,6 +245,7 @@
     if (indexPath.section == 0) {
         return 100;
     }else if (indexPath.section == 1){
+        
         ClassModel *model = _classArray[indexPath.row];
         if (model.onead.length > 0 && model.label_str.length > 0) {
             return 150;
@@ -242,6 +254,7 @@
         }else{
             return 80;
         }
+        
     }
     return 100;
 }

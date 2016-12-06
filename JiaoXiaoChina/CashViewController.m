@@ -40,6 +40,7 @@
     self.view.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
     self.title = @"我的现金券";
     [self addBtnWithTitle:nil imageName:KBtnBack navBtn:KNavBarLeft];
+    
     UIView *fieldView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, KScreenWidth, 40)];
     fieldView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:fieldView];
@@ -66,6 +67,7 @@
     flow.minimumInteritemSpacing = 10;
     flow.itemSize = CGSizeMake(KScreenWidth-20, 110);
     flow.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    
     _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 104, KScreenWidth, KScreenHeight-104) collectionViewLayout:flow];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;

@@ -88,10 +88,12 @@
     label.font = [UIFont systemFontOfSize:16];
     label.textColor = [UIColor whiteColor];
     [_rightBtn addSubview:label];
+    
     _rightBtn.hidden = YES;
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(_rightBtn).insets(UIEdgeInsetsMake(10, 0, 0, 0));
     }];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:_rightBtn];
     [_rightBtn addTarget:self action:@selector(rightClick:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -108,6 +110,7 @@
             _headImageView.image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
            
         }
+        
         NSString *imgStr;
         
         if ([_dict[@"sex"] integerValue] == 1) {
@@ -115,6 +118,7 @@
         }else if ([_dict[@"sex"] integerValue] == 2){
             imgStr = @"user_sex_female";
         }
+        
         sexView.image = [UIImage imageNamed:imgStr];
         nameLabel.text = _dict[@"nickname"];
     }
@@ -186,6 +190,7 @@
         model.rightTitle = array3[i];
         [_dataArray addObject:model];
     }
+    
     [_tableView reloadData];
 }
 

@@ -26,8 +26,10 @@
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
     NSString *timeStr = [formatter stringFromDate:date];
     _timeLabel.text = timeStr;
+    
     _payBtn.layer.cornerRadius = 5;
     _payBtn.layer.masksToBounds = YES;
+    
     if (_model.is_expire.integerValue == 1) {
         _payBtn.backgroundColor = [UIColor lightGrayColor];
     }else{
@@ -45,6 +47,7 @@
     }else if (model.payment_type.integerValue == 1){
         _typeLabel.text = @"待支付全款";
     }
+    
 }
 
 - (IBAction)payBtn:(UIButton *)sender {

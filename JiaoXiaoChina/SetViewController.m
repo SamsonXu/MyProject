@@ -143,15 +143,19 @@
     //重新请求用户信息
     KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlInfo parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
+        
         KMBProgressHide;
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"data"]];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:dict[@"is_cb"] forKey:KJZLX];
+        
         if ([_urlStr isEqualToString:KUrlUpdateJZ]) {
             [DefaultManager createQuestionBase];
         }
+        
         [defaults setObject:dict forKey:@"userInfo"];
         [self requestData];
+        
     } failBlock:^{
         KMBProgressHide;
     }];
@@ -182,6 +186,7 @@
 {
     NSString *ide = @"myCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ide];
+    
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ide];
     }
@@ -368,6 +373,7 @@
 
 //提示框
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     if (buttonIndex == 0) {
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -441,24 +447,25 @@
 - (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize
 {
     UIImage *newimage;
+    
     if (nil == image) {
         newimage = nil;
-    }
-    else{
+    }else{
         CGSize oldsize = image.size;
         CGRect rect;
+        
         if (asize.width/asize.height > oldsize.width/oldsize.height) {
             rect.size.width = asize.height*oldsize.width/oldsize.height;
             rect.size.height = asize.height;
             rect.origin.x = (asize.width - rect.size.width)/2;
             rect.origin.y = 0;
-        }
-        else{
+        }else{
             rect.size.width = asize.width;
             rect.size.height = asize.width*oldsize.height/oldsize.width;
             rect.origin.x = 0;
             rect.origin.y = (asize.height - rect.size.height)/2;
         }
+        
         UIGraphicsBeginImageContext(asize);
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetFillColorWithColor(context, [[UIColor clearColor] CGColor]);

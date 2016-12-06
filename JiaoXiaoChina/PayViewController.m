@@ -32,23 +32,28 @@
 }
 
 - (void)requestData{
+    
     _dataArray = [NSMutableArray arrayWithArray:@[@{@"image":@"wx",@"title":@"微信支付"},@{@"image":@"zfb",@"title":@"支付宝支付"}]];
     KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlCashList parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
+        
         KMBProgressHide;
         NSArray *array = [CashModel arrayOfModelsFromDictionaries:responseObject[@"data"]];
         NSString *str;
+        
         if (_model.is_payment_type.integerValue == 2) {
             str = _model.yufujin;
         }else{
             str = _model.pric;
         }
+        
         NSMutableArray *modelArr = [[NSMutableArray alloc]init];
         for (CashModel *model in array) {
             if ([model.is_use isEqualToString:@"0"] && [model.is_expire isEqualToString:@"0"] && model.price.integerValue < str.integerValue) {
                 [modelArr addObject:model];
             }
         }
+        
         if (modelArr.count > 0) {
             _cashModel = modelArr[0];
 
@@ -76,6 +81,7 @@
     [self.view addSubview:bottmoView];
     UILabel *label1 = [MyControl labelWithTitle:@"现金券" fram:CGRectMake(0, 0, 0, 0) fontOfSize:14];
     [bottmoView addSubview:label1];
+    
     [label1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(bottmoView);
         make.left.equalTo(bottmoView).offset(10);
@@ -85,30 +91,37 @@
     UILabel *label2 = [MyControl labelWithTitle:@"减0" fram:CGRectMake(0, 0, 0, 0) color:KColorSystem fontOfSize:16 numberOfLine:1];
     label2.tag = 10;
     [bottmoView addSubview:label2];
+    
     [label2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(bottmoView);
         make.left.equalTo(label1.mas_right);
         make.height.equalTo(label1);
     }];
+    
     UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 0, 0, 0) title:@"确认支付" imageName:nil];
     btn.backgroundColor = KColorSystem;
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bottmoView addSubview:btn];
+    
     [btn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.right.equalTo(bottmoView);
         make.size.mas_equalTo(CGSizeMake(100, 50));
     }];
+    
     UILabel *priceLabel = [MyControl labelWithTitle:[NSString stringWithFormat:@"￥ %@",_model.pric] fram:CGRectMake(0, 0, 0, 0) color:KColorSystem fontOfSize:16 numberOfLine:1];
     priceLabel.tag = 11;
     [bottmoView addSubview:priceLabel];
+    
     [priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(bottmoView);
         make.right.equalTo(btn.mas_left).offset(-10);
         make.height.equalTo(label1);
     }];
+    
     UILabel *label3 = [MyControl labelWithTitle:@"待支付" fram:CGRectMake(0, 0, 0, 0) fontOfSize:14];
     [bottmoView addSubview:label3];
+    
     [label3 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(bottmoView);
         make.right.equalTo(priceLabel.mas_left);
@@ -117,10 +130,12 @@
 }
 
 - (void)btnClick:(UIButton *)btn{
+    
     if (_currentCell == 100) {
         [self showAlertViewWith:@[@"未选择支付方式",@"确定"] sel:nil];
         return;
     }
+    
     if (_currentCell == 0) {
         if ([WXApi isWXAppInstalled]) {
             if (_isOrder) {
@@ -149,6 +164,7 @@
                     KMBProgressHide;
                 }];
             }else{
+                
                 NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneNum,@"username":_userName,@"token":[NSString stringWithFormat:@"%@",[DefaultManager getValueOfKey:@"token"]],@"pay_type":@"1",@"rid":[NSString stringWithFormat:@"%@",_cashModel.pid]};
                 KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlPay2 parameters:dict sucBlock:^(id responseObject) {
@@ -194,6 +210,7 @@
                 KMBProgressHide;
             }];
         }else{
+            
             NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneNum,@"username":_userName,@"token":[NSString stringWithFormat:@"%@",[DefaultManager getValueOfKey:@"token"]],@"pay_type":@"2",@"rid":[NSString stringWithFormat:@"%@",_cashModel.pid]};
             KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlPay2 parameters:dict sucBlock:^(id responseObject) {
@@ -223,26 +240,35 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1"];
+    
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell1"];
     }
+    
     if (indexPath.section == 0) {
+        
         HeadView *vc = [[HeadView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 70) model:_model];
         [cell.contentView addSubview:vc];
         return cell;
+        
     }else if (indexPath.section == 1){
+        
         cell.textLabel.text = @"我的学车现金券";
         cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.detailTextLabel.text = @"未选择优惠券";
         cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+        
         if (_cashModel.price.length > 0) {
             cell.detailTextLabel.text = [NSString stringWithFormat:@"现金券减%@元",_cashModel.price];
             cell.detailTextLabel.textColor = KColorRGB(52, 164, 40);
         }
         return cell;
+        
     }else if (indexPath.section == 2){
+        
         PayCell *payCell = [tableView dequeueReusableCellWithIdentifier:@"payCell"];
         if (!payCell) {
             payCell = [[NSBundle mainBundle]loadNibNamed:@"PayCell" owner:self options:nil][0];
@@ -250,17 +276,20 @@
         NSDictionary *dict = _dataArray[indexPath.row];
         payCell.iconImageView.image = [UIImage imageNamed:dict[@"image"]];
         payCell.titleLabel.text = dict[@"title"];
+        
         if (indexPath.row == _currentCell) {
             payCell.rightImageView.image = [UIImage imageNamed:@"ndui"];
         }else{
             payCell.rightImageView.image = [UIImage imageNamed:@"chek"];
         }
         return payCell;
+        
     }
     return nil;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
     if (section == 2) {
         UILabel *label = [MyControl boldLabelWithTitle:@"   支付方式" fram:CGRectMake(0, 0, 0, 0) color:[UIColor blackColor] fontOfSize:16];
         label.backgroundColor = [UIColor whiteColor];
@@ -271,6 +300,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
     if (section == 2) {
         return 40;
     }
@@ -282,6 +312,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     if (indexPath.section == 0) {
         return 70;
     }
@@ -289,8 +320,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     _currentCell = indexPath.row;
+    
     if (indexPath.section == 1) {
         CashViewController *vc = [[CashViewController alloc]init];
         vc.isPay = YES;
@@ -309,6 +342,7 @@
 }
 
 - (void)leftClick:(UIButton *)btn{
+    
     if (!_isOrder) {
         NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneNum,@"username":_userName,@"token":[NSString stringWithFormat:@"%@",[DefaultManager getValueOfKey:@"token"]]};
 

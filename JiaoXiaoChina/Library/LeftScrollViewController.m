@@ -60,6 +60,7 @@
 }
 
 - (void)changeUserInfo{
+    
     self.hasLogin = YES;
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"]];
     NSString *str = dict[@"headimg"];
@@ -148,6 +149,7 @@
         title = @"夜间";
         image = @"night";
     }
+    
     NSArray *titles = @[@"设置",title];
     NSArray *images = @[@"sidemenu_icon_settings",image];
     CGFloat width = _tableView.frame.size.width/2;
@@ -180,6 +182,7 @@
 }
 
 - (void)btnClick:(UIButton *)btn{
+    
     NSInteger index = btn.tag;
     
         if (index == 10) {

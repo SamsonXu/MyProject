@@ -66,6 +66,7 @@
     botomLabel.textAlignment = NSTextAlignmentCenter;
     botomLabel.backgroundColor = KColorSystem;
     [self addSubview:botomLabel];
+    
     [botomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(classLabel);
         make.height.mas_equalTo(15);

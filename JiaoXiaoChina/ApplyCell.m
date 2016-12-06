@@ -40,6 +40,7 @@
     NSString *path = [[NSBundle mainBundle]pathForResource:@"city" ofType:@"plist"];
     NSMutableArray *array = [[NSMutableArray alloc]initWithContentsOfFile:path];
     NSString *areaStr;
+    
     for (NSDictionary *dict in array) {
         if ([model.city isEqualToString:dict[@"id"]]) {
             NSArray *areaArr = dict[@"areadata"];

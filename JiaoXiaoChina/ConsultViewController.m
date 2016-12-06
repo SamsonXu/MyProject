@@ -91,13 +91,17 @@
     if (btn.tag == 100) {
 
             if (_nameField.text.length > 0 && [MyControl isValueToPhoneNumber:_phoneField.text] && _timer) {
+                
                 KMBProgressShow;
                 [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlConsult2 parameters:@{@"sms_code":_codeField.text,@"mobile_phone":_phoneField.text} sucBlock:^(id responseObject) {
+                    
                     KMBProgressHide;
                     if ([responseObject[@"status"] integerValue] == 1) {
                         
                         if (_model.is_payment.integerValue == 0) {
+                            
                             NSDictionary *dict = @{@"did":_model.did,@"kid":_model.pid,@"mobile":_phoneField.text,@"username":_nameField.text};
+                            
                             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlPay1 parameters:dict sucBlock:^(id responseObject) {
 
                                 [self showAlertViewWith:@[@"报名成功",@"确定"] sel:nil];
@@ -157,6 +161,7 @@
                     KMBProgressHide;
                 }];
             }else{
+                
                 if (_nameField.text.length == 0) {
                     [self showAlertViewWith:@[@"请输入真实姓名",@"确定"] sel:nil];
                 }else if (![MyControl isValueToPhoneNumber:_phoneField.text]){
@@ -164,6 +169,7 @@
                 }else{
                     
                 }
+                
             }
     }
 

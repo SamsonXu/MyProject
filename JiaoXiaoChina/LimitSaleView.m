@@ -143,6 +143,7 @@
     NSArray *array = @[[NSString stringWithFormat:@"%ld",(NSInteger)_inte/3600],[NSString stringWithFormat:@"%ld",(NSInteger)_inte%3600/60],[NSString stringWithFormat:@"%ld",(NSInteger)_inte%3600%60]];
     
     for (int i = 0; i < 3; i++) {
+        
         UILabel *label = [MyControl labelWithTitle:array[i] fram:CGRectMake(0, 0, 0, 0) fontOfSize:12];
         label.tag = 100+i;
         label.textColor = [UIColor whiteColor];
@@ -163,6 +164,7 @@
         }];
         
         if (i < 2) {
+            
             UILabel *label1 = [MyControl labelWithTitle:@":" fram:CGRectMake(0, 0, 0, 0) fontOfSize:14];
             label1.textAlignment = NSTextAlignmentCenter;
             [subView addSubview:label1];
@@ -171,6 +173,7 @@
                 make.left.equalTo(label.mas_right);
                 make.size.mas_equalTo(CGSizeMake(10, 20));
             }];
+            
         }
         
         
@@ -189,10 +192,12 @@
     _inte--;
     
     NSArray *array = @[[NSString stringWithFormat:@"%ld",(NSInteger)_inte/3600],[NSString stringWithFormat:@"%ld",(NSInteger)_inte%3600/60],[NSString stringWithFormat:@"%ld",(NSInteger)_inte%3600%60]];
+    
     for (int i = 0; i < array.count; i++) {
         UILabel *label = [self viewWithTag:100+i];
         label.text = array[i];
     }
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

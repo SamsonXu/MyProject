@@ -46,6 +46,7 @@
 
 
 - (IBAction)favoriteBtn:(UIButton *)sender {
+    
     if (sender.selected) {
         sender.selected = NO;
         _favoriteImgView.image = [UIImage imageNamed:@"zhan"];
@@ -57,6 +58,7 @@
         _favoriteLabel.text = [NSString stringWithFormat:@"%ld",_favoriteLabel.text.integerValue+1];
         [self.delegate changFavoriteNum:YES pid:_model.pid];
     }
+    
 }
 
 - (IBAction)commentBtn:(UIButton *)sender {

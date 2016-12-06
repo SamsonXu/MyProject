@@ -36,9 +36,11 @@
     _tableView.backgroundColor = KGrayColor;
     UIButton *btn = [MyControl buttonWithFram:CGRectMake(0, 300, KScreenWidth, 40) title:@"退出登录" imageName:nil];
     btn.backgroundColor = [UIColor whiteColor];
+    
     if (!self.hasLogin) {
         btn.hidden = YES;
     }
+    
     [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_tableView addSubview:btn];
@@ -47,6 +49,7 @@
 - (void)requestData{
     
     NSArray *array = @[@{KImage:@"feedback",KTitle:@"意见反馈",KDetail:@""},@{KImage:@"userplan",KTitle:@"用户协议",KDetail:@""},@{KImage:@"aboutus",KTitle:@"关于驾校中国",KDetail:@""},@{KImage:@"delcookie",KTitle:@"清除缓存",KDetail:@""}];
+    
     for (NSDictionary *dict in array) {
         MyCellModel *model = [[MyCellModel alloc]init];
         model.image = dict[KImage];
@@ -54,6 +57,7 @@
         model.rightTitle = dict[KDetail];
         [_dataArray addObject:model];
     }
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

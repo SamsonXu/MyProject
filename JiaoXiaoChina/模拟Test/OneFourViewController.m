@@ -355,7 +355,7 @@
             vc.kid = self.flag+1;
             [self.delegate doPushWithVc:vc];
         }else if (tag == 2){
-            
+            alert(@"暂无内容");
         }else if (tag == 3){
             RidersTopicController *vc = [[RidersTopicController alloc]init];
             vc.cateId = @"6";

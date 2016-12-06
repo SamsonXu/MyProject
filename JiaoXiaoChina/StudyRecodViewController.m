@@ -11,11 +11,10 @@
 #import "PiechartModel.h"
 #import "AnswerViewController.h"
 @interface StudyRecodViewController ()<UIAlertViewDelegate>
-
-
 {
     UIView *_bgView;
     PiechartDetchView *_chartTwo;
+    NSMutableArray *_numArray;
 }
 @end
 
@@ -36,8 +35,14 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *dict = [defaults objectForKey:KTrueFaults];
-    NSString *str1 = dict[KTrue];
-    NSString *str2 = dict[KFaults];
+    NSString *str1 = @"100";
+    if (dict[KTrue]) {
+        str1 = dict[KTrue];
+    }
+    NSString *str2 = @"30";
+    if (dict[KFaults]) {
+        str2 = dict[KFaults];
+    }
     NSInteger cb = [[defaults objectForKey:KJZLX]integerValue];
     NSArray *array = [[DBManager shareManager]selectDataWithCb:cb];
     NSMutableArray *transArray = [[NSMutableArray alloc]init];
@@ -49,16 +54,19 @@
     }else{
         transArray = [array mutableCopy];
     }
-    NSMutableArray *numArr = [[NSMutableArray alloc]init];
+    
+//    [self performSelectorInBackground:@selector(getNumArrayWithArray:) withObject:transArray];
+    _numArray = [[NSMutableArray alloc]init];
     NSArray *queArr = [DefaultManager getQuestionBase];
     for (NSString *num in queArr) {
         for (AnswerModel *model in transArray) {
             if (num.integerValue == model.pid) {
-                [numArr addObject:model];
+                [_numArray addObject:model];
             }
         }
     }
-    NSString *str3 = [NSString stringWithFormat:@"%ld",[numArr count]];
+    
+    NSString *str3 = [NSString stringWithFormat:@"%ld",[_numArray count]];
     //饼状图背景
     _bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, 400)];
     _bgView.backgroundColor = [UIColor whiteColor];
@@ -66,11 +74,11 @@
     NSInteger totlenum = str1.integerValue+str2.integerValue+str3.integerValue;
     PiechartModel *model1 = [[PiechartModel alloc]init];
     model1.color = [UIColor redColor];
-    model1.perStr = [NSString stringWithFormat:@"%lf",(CGFloat)str1.integerValue/totlenum];
+    model1.perStr = [NSString stringWithFormat:@"%lf",(CGFloat)str2.integerValue/totlenum];
     
     PiechartModel *model3 = [[PiechartModel alloc]init];
     model3.color = KColorRGB(115, 193, 0);
-    model3.perStr = [NSString stringWithFormat:@"%lf",(CGFloat)str2.integerValue/totlenum];
+    model3.perStr = [NSString stringWithFormat:@"%lf",(CGFloat)str1.integerValue/totlenum];
     NSArray *testArray = [NSArray arrayWithObjects:model1,model3, nil];
     
     //饼状图
@@ -87,6 +95,8 @@
     NSArray *array1 = @[[UIColor greenColor],[UIColor redColor],[UIColor grayColor]];
     NSArray *array2 = @[@"答对题",@"答错题",@"未做题"];
     NSArray *array3 = @[str1,str2,str3];
+    
+    
     for (int i = 0; i < array1.count; i++) {
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(180, 305+30*i, 10, 10)];
         view.clipsToBounds = YES;
@@ -113,6 +123,18 @@
         btn.backgroundColor = KColorSystem;
         [_bootmView addSubview:btn];
     }
+}
+
+- (void)getNumArrayWithArray:(NSArray *)array{
+//    _numArray = [[NSMutableArray alloc]init];
+//    NSArray *queArr = [DefaultManager getQuestionBase];
+//    for (NSString *num in queArr) {
+//        for (AnswerModel *model in array) {
+//            if (num.integerValue == model.pid) {
+//                [_numArray addObject:model];
+//            }
+//        }
+//    }
 }
 
 - (void)btnClick:(UIButton *)btn{

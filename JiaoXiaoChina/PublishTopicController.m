@@ -56,9 +56,11 @@
 }
 
 - (void)requestData{
+    
     if (!_isJournal) {
         return;
     }
+    
     KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicType parameters:@{@"id":_pid} sucBlock:^(id responseObject) {
         KMBProgressHide;
@@ -107,6 +109,7 @@
     _topicField.font = [UIFont systemFontOfSize:14];
     _topicField.placeholder = @"标题(可自选)";
     [self.view addSubview:_topicField];
+    
     UILabel *lineLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 104, KScreenWidth, 1)];
     lineLabel.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:lineLabel];
@@ -136,6 +139,7 @@
     }else{
         [_typeBtn setTitle:@"选择话题" forState:UIControlStateNormal];
     }
+    
     [_typeBtn addTarget:self action:@selector(typeBtnClik:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_typeBtn];
     
@@ -161,6 +165,7 @@
         cityLabel.text = @"获取位置失败";
         cityLabel.textColor = [UIColor grayColor];
     }
+    
     [self.view addSubview:btn];
     [btn addSubview:locaView];
     [btn addSubview:cityLabel];
@@ -186,6 +191,7 @@
     
     CGFloat width = (KScreenWidth-50)/4;
     for (int i = 0; i < 9; i++) {
+        
         UIButton *btn = [MyControl buttonWithFram:CGRectMake(10+(width+10)*(i%4), 310+(width+10)*(i/4), width, width) title:nil imageName:@"tianjia" tag:100+i];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -194,10 +200,12 @@
         delBtn.tag = 200+i;
         delBtn.hidden = YES;
         [btn addSubview:delBtn];
+        
         if (i != 0) {
             btn.hidden = YES;
         }
         [self.view addSubview:btn];
+        
     }
     
    
@@ -289,6 +297,7 @@
 }
 
 - (void)delBtnClick:(UIButton *)btn{
+    
     NSInteger index = btn.tag-200;
     for (int i = (int)index; i < _currentImg; i++) {
         UIButton *btn = [self.view viewWithTag:100+i+1];
@@ -299,11 +308,13 @@
             btn1.subviews[1].hidden = YES;
         }
     }
+    
     UIButton *btn1 = [self.view viewWithTag:_currentImg+100];
     btn1.hidden = YES;
     _currentImg--;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"token":[DefaultManager getValueOfKey:@"token"],@"id":_imageArray[index][@"id"]} options:NSJSONWritingPrettyPrinted error:nil];
     NSString *str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
     [[HttpManager shareManager]requestDataWithMethod:KUrlPut urlString:KUrlTopicImgDel parameters:str sucBlock:^(id responseObject) {
     } failBlock:^{
         
@@ -314,14 +325,17 @@
     //转换为二进制数据
     NSString *str = @"jpeg";
     NSData *data = UIImageJPEGRepresentation(img, 1.0);
+    
     if (data == NULL) {
         data = UIImagePNGRepresentation(img);
         str = @"png";
     }
+    
     NSString *imgType = [MyControl typeForImageData:data];
     UIButton *btn = [self.view viewWithTag:100+_currentImg];
     UIImage *image = [UIImage sd_animatedGIFNamed:@"loding-3"];
     [btn setImage:image forState:UIControlStateNormal];
+    
     KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlTopicTP parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"image_type":imgType,@"wenda_image":data} sucBlock:^(id responseObject) {
         KMBProgressHide;
@@ -333,6 +347,7 @@
     } failBlock:^{
         KMBProgressHide;
     }];
+    
 }
 
 - (void)btnClick:(UIButton *)btn{
@@ -347,8 +362,10 @@
 
 //提示框
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
     UIImagePickerController *picker = [[UIImagePickerController alloc]init];
     if (buttonIndex == 0) {
+        
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         }
@@ -356,6 +373,7 @@
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
             picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
+        
     }else{
         return;
     }
@@ -389,6 +407,7 @@
     else if ([[info objectForKey:UIImagePickerControllerMediaType] isEqualToString:(__bridge NSString *)kUTTypeMovie]) {
         
     }
+    
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -412,18 +431,23 @@
     }else{
         NSString *cityName = [DefaultManager getValueOfKey:@"currentCity"];
         NSString *cityId = @"0";
+        
         if (cityName) {
             NSString *path = [[NSBundle mainBundle]pathForResource:@"city" ofType:@"plist"];
             NSMutableArray *array = [[NSMutableArray alloc]initWithContentsOfFile:path];
+            
             for (NSDictionary *dict in array) {
                 if ([dict[@"areaname"] isEqualToString:cityName]) {
                     cityId = dict[@"id"];
-                }
+              }
             }
+            
         }else{
             cityName = @"";
         }
+        
         if (_isJournal) {
+            
             KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlJournalPublish parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"vid":_typeDict[@"wcid"],@"cityid":cityId,@"title":_topicField.text,@"content":_textView.text,@"cityname":cityName} sucBlock:^(id responseObject) {
                 KMBProgressHide;
@@ -431,7 +455,9 @@
             } failBlock:^{
                 KMBProgressHide;
             }];
+            
         }else{
+            
             KMBProgressShow;
             [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlTopicPublish parameters:@{@"token":[DefaultManager getValueOfKey:@"token"],@"cateid":_topicId,@"cityid":cityId,@"title":_topicField.text,@"content":_textView.text,@"cityname":cityName} sucBlock:^(id responseObject) {
                 KMBProgressHide;
@@ -439,6 +465,7 @@
             } failBlock:^{
                 KMBProgressHide;
             }];
+            
         }
         
     }

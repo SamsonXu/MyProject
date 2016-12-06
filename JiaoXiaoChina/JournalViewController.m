@@ -37,9 +37,11 @@
     }else{
         dict = @{@"token":[DefaultManager getValueOfKey:@"token"]};
     }
+    
     KMBProgressShow;
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlTopicList parameters:dict sucBlock:^(id responseObject) {
         KMBProgressHide;
+        
         if ([responseObject[@"status"] integerValue] == 1) {
             _dict = responseObject[@"userinfo"];
             _dataArray = [JournalModel arrayOfModelsFromDictionaries:responseObject[@"volist"]];
@@ -48,9 +50,11 @@
         }else{
 //            NSLog(@"%@",responseObject[@"msg"]);
         }
+        
     } failBlock:^{
         KMBProgressHide;
     }];
+    
 }
 
 - (void)createUI{
@@ -60,6 +64,7 @@
     UIButton *btn = [MyControl buttonWithFram:CGRectMake(KScreenWidth-60, KScreenHeight-60, 40, 40) title:nil imageName:@"jia"];
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
+    
     if (_isOthers) {
         btn.hidden = YES;
         self.title = @"Ta的学车日志";
@@ -93,11 +98,13 @@
     //头像
     UIImageView *headView = [UIImageView new];
     NSString *str = _dict[@"headimg"];
+    
     if (str.length == 0) {
         headView.image = [UIImage imageNamed:@"f0"];
     }else{
         [headView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"f0"]];
     }
+    
     headView.layer.cornerRadius = 30;
     headView.layer.masksToBounds = YES;
     [imageView addSubview:headView];
@@ -122,11 +129,13 @@
     //性别
     UIImageView *sexView = [UIImageView new];
     NSString *imgStr = @"";
+    
     if ([_dict[@"sex"] integerValue] == 1) {
         imgStr = @"user_sex_male";
     }else if ([_dict[@"sex"] integerValue] == 2){
         imgStr = @"user_sex_female";
     }
+    
     sexView.image = [UIImage imageNamed:imgStr];
     [imageView addSubview:sexView];
     

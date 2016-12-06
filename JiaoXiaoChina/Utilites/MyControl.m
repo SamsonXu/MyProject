@@ -154,7 +154,6 @@
     NSError *error;
     success = [fileManager fileExistsAtPath:filePath];
     if(success) {
-//        NSLog(@"success");
         success = [fileManager removeItemAtPath:filePath error:&error];
     }
     //将图片尺寸改为80*80

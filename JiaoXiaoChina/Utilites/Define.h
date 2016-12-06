@@ -10,6 +10,8 @@
 #define Define_h
 
 #pragma mark-----系统相关
+
+#define alert(msg) [[[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil] show];
 #define KWS(ws) __weak typeof(self) ws = self
 #define KScreenWidth   self.view.bounds.size.width
 #define KScreenHeight self.view.bounds.size.height

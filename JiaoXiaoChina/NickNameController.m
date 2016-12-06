@@ -49,11 +49,12 @@
     
     if ([_nameField.text isEqualToString:_name]){
         [self showAlertViewWith:@[@"昵称未做修改",@"确定"] sel:nil];
-    }else if (_nameField.text.length > 0 && _nameField.text.length <= 10) {
+    }else if (_nameField.text.length > 0 && _nameField.text.length <= 10){
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"nickname":_nameField.text,@"token":[DefaultManager getValueOfKey:@"token"]} options:NSJSONWritingPrettyPrinted error:nil];
         NSString *str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
         KMBProgressShow;
+        
         [[HttpManager shareManager]requestDataWithMethod:KUrlPut urlString:KUrlUpdateName parameters:str sucBlock:^(id responseObject) {
             KMBProgressHide;
             if ([responseObject[@"status"] integerValue] == 1){
@@ -66,6 +67,7 @@
         } failBlock:^{
             KMBProgressHide;
         }];
+        
     }else {
         [self showAlertViewWith:@[@"昵称长度为1~10个字！",@"确定"] sel:nil];
     }

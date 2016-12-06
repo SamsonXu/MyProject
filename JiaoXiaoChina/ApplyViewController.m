@@ -98,6 +98,7 @@
         [_tableView.footer endRefreshing];
         return ;
     }
+    
     [MBProgressHUD showMessage:@"正在加载"];
     [[HttpManager shareManager]requestDataWithMethod:KUrlGet urlString:KUrlAdver1 parameters:@{@"cityid":_cityId,@"id":@"73"} sucBlock:^(id responseObject) {
         [MBProgressHUD hideHUD];
@@ -281,6 +282,7 @@
         [_headView addSubview:btn];
         //一排按钮
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+                
                 if (!lastBtn) {
                     make.left.equalTo(ws.view);
                 }else{
@@ -293,6 +295,7 @@
                 }
                 make.width.mas_equalTo(width);
                 make.height.mas_equalTo(65);
+                
             }];
         //按钮内容
 
@@ -465,6 +468,7 @@
     }else{
         
     NSDictionary *dict = [[NSUserDefaults standardUserDefaults]objectForKey:@"userInfo"];
+        
     if ([dict[@"headimg"] length] == 0) {
         _headImageView.image = [UIImage imageNamed:@"f0"];
     }else{
@@ -472,6 +476,7 @@
         UIImage *image = [UIImage imageWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/selfPhoto.jpg"]];
         _headImageView.image = image;
     }
+        
     }
     [self addBtnWithTitle:nil imageName:@"hb" navBtn:KNavBarRight];
 }
@@ -501,6 +506,7 @@
     }else{
         
         ClassCell *cell = [tableView dequeueReusableCellWithIdentifier:ide2];
+        
         if (!cell) {
             cell = [[NSBundle mainBundle]loadNibNamed:@"ClassCell" owner:self options:nil][0];
         }
@@ -508,6 +514,7 @@
         if ([_classArray[indexPath.section] count] > 0) {
             ClassModel *model = _classArray[indexPath.section][indexPath.row-1];
             cell.model = model;
+            
             if (model.is_payment_type.integerValue != 2) {
                 cell.yufuLabel.hidden = YES;
                 cell.yufuImageView.hidden = YES;
@@ -524,6 +531,7 @@
         return 100;
     }else{
         ClassModel *model = _classArray[indexPath.section][indexPath.row-1];
+        
         if (model.onead.length > 0 && model.label_str.length > 0) {
             return 150;
         }else if (model.onead.length > 0 || model.label_str.length > 0){
@@ -531,6 +539,7 @@
         }else{
             return 80;
         }
+        
     }
 }
 
@@ -549,8 +558,8 @@
         
         DriveDetailController *vc = [[DriveDetailController alloc]init];
         vc.model = _dataArray[indexPath.section];
-        
         [self.navigationController pushViewController:vc animated:YES];
+        
     }else{
         
         ClassDetailController *vc = [[ClassDetailController alloc]init];
@@ -559,6 +568,7 @@
         vc.longitude = _longitude;
         [self.navigationController pushViewController:vc animated:YES];
     }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.tabBarController.tabBar.hidden = YES;
 }
@@ -577,6 +587,7 @@
     if (_locatNum > 0) {
         return;
     }
+    
     _locatNum++;
     CLLocationCoordinate2D cl2D = location.coordinate;
     _latitude = [NSString stringWithFormat:@"%lf",cl2D.latitude];
@@ -591,6 +602,7 @@
         UIImageView *imageView = btn.subviews[1];
         
         if (!error) {
+            
             NSString *str = placemark.addressDictionary[@"City"];
             NSString *cityStr = [str substringToIndex:str.length-1];
             label.text = cityStr;
@@ -598,11 +610,13 @@
             imageView.image = [UIImage imageNamed:@"navigationbar_arrow_down"];
             NSString *path = [[NSBundle mainBundle]pathForResource:@"city" ofType:@"plist"];
             NSMutableArray *array = [[NSMutableArray alloc]initWithContentsOfFile:path];
+            
             for (NSDictionary *dict in array) {
                 if ([dict[@"areaname"] isEqualToString:cityStr]) {
                     _cityId = dict[@"id"];
                 }
             }
+            
             [self requestData];
         }else{
             label.text = @"定位失败";
@@ -620,11 +634,13 @@
         vc.delegate = self;
         [self.navigationController pushViewController:vc animated:YES];
         self.tabBarController.tabBar.hidden = YES;
+        
     }else if (index == 1) {
         
         [UIView animateWithDuration:1 animations:^{
             _cashView.hidden = YES;
         }];
+        
         if ([DefaultManager getValueOfKey:@"token"]) {
             WebViewController *vc = [[WebViewController alloc]init];
             vc.navTitle = @"学车现金券";
@@ -636,11 +652,13 @@
             [self.navigationController pushViewController:vc animated:YES];
         }
         self.tabBarController.tabBar.hidden = YES;
+        
     }else if (index == 2){
         [UIView animateWithDuration:1 animations:^{
             _cashView.hidden = YES;
         }];
     }
+    
 }
 
 - (void)changeCityName:(NSString *)name{
@@ -655,6 +673,7 @@
     
     NSString *path = [[NSBundle mainBundle]pathForResource:@"city" ofType:@"plist"];
     NSMutableArray *array = [[NSMutableArray alloc]initWithContentsOfFile:path];
+    
     for (NSDictionary *dict in array) {
         if ([dict[@"areaname"] isEqualToString:name]) {
             _cityId = dict[@"id"];

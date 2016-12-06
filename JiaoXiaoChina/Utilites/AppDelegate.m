@@ -33,6 +33,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -55,17 +56,21 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     //网络请求数据
     if ([DefaultManager getValueOfKey:@"token"]) {
+        
         [[HttpManager shareManager]requestDataWithMethod:KUrlPost urlString:KUrlInfo parameters:@{@"token":[DefaultManager getValueOfKey:@"token"]} sucBlock:^(id responseObject) {
+            
             NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"data"]];
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setObject:dict forKey:@"userInfo"];
             NSString *imgUrl = dict[@"headimg"];
-            UIImage *image;
+            UIImage *image = [[UIImage alloc]init];
+            
             if (imgUrl.length == 0) {
                 image = [UIImage imageNamed:@"f0"];
             }else{
                 image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imgUrl]]];
             }
+            
             [MyControl writhImageToFileWith:image];
             [userDefaults setObject:dict[@"is_cb"] forKey:KJZLX];
             [userDefaults setObject:dict forKey:@"userInfo"];
@@ -77,19 +82,24 @@
         }];
 
     }else{
+        
         if (![DefaultManager getValueOfKey:KJZLX]) {
             [userDefaults setObject:@"1" forKey:KJZLX];
             [userDefaults synchronize];
             [DefaultManager createQuestionBase];
         }
+        
     }
+    
     _nightView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     _nightView.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.3];
     _nightView.userInteractionEnabled = NO;
+    
     if ([[DefaultManager getValueOfKey:@"nightModel"] isEqualToString:@"yes"]) {
         [self.window addSubview:_nightView];
         [self.window bringSubviewToFront:_nightView];
     }
+    
     [userDefaults addObserver:self forKeyPath:@"nightModel" options:NSKeyValueObservingOptionNew context:nil];
     UIView *nightView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
     nightView.backgroundColor = [UIColor blackColor];
@@ -102,12 +112,15 @@
     }else{
         [self loginAgain];
     }
+    
     return YES;
 }
 
 //夜间模式
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
     NSString *str = change[@"new"];
+    
     if ([str isEqualToString:@"no"]) {
         [_nightView removeFromSuperview];
     }else if ([str isEqualToString:@"yes"]){
@@ -117,17 +130,21 @@
 }
 
 - (void)loginFirst{
+    
     FirstLoginController *vc = [[FirstLoginController alloc]init];
     self.window.rootViewController = vc;
 }
 
 - (void)loginAgain{
+    
     UINavigationBar *navBar = [UINavigationBar appearance];
     navBar.barStyle = UIBarStyleBlack;
     navBar.barTintColor = KColorRGB(19, 153, 229);
     navBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont boldSystemFontOfSize:17]};
+    
     MyTabBarController *tabBarCtrl = [MyTabBarController shareTabBar];
     LeftScrollViewController *leftMenuViewController = [[LeftScrollViewController alloc] init];
+    
     if ([DefaultManager getValueOfKey:@"token"]) {
         leftMenuViewController.hasLogin = YES;
     }else{
@@ -150,8 +167,11 @@
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+    
     if ([url.host isEqualToString:@"Pay"]) {
+        
         [WXApi handleOpenURL:url delegate:self];
+        
     }else if ([url.host isEqualToString:@"safepay"]){
         //跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
@@ -188,6 +208,7 @@
 
 //微信回调
 - (void)onResp:(BaseResp *)resp {
+    
     NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
     NSString *strTitle;
     
@@ -195,6 +216,7 @@
     {
         strTitle = [NSString stringWithFormat:@"发送媒体消息结果"];
     }
+    
     if([resp isKindOfClass:[PayResp class]]){
         //支付返回结果，实际支付结果需要去微信服务器端查询
         strTitle = [NSString stringWithFormat:@"支付结果"];
@@ -211,6 +233,7 @@
                 break;
         }
     }
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 }

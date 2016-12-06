@@ -11,6 +11,7 @@
 @implementation TestView
 
 -(instancetype)initWithFrame:(CGRect)frame flag:(NSInteger)flag{
+    
     if (self = [super initWithFrame:frame]) {
         _flag = flag;
         [self createViewWithFlag:flag];
@@ -27,6 +28,7 @@
     NSArray *titles2 = @[@"考试记录",@"成绩排行",@"考试统计",@"考前许愿"];
     NSArray *images = [NSArray new];
     NSArray *titles = [NSArray new];
+    
     //中间按钮
     UIButton *midBtn = [UIButton new];
     midBtn.tag = 104;
@@ -36,27 +38,34 @@
     midLabel.textAlignment = NSTextAlignmentCenter;
     KWS(ws);
     if (flag == 1) {
+        
         images = images1;
         titles = titles1;
         midBtn.backgroundColor = KColorRGB(115, 193, 0);
         midBtn.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:0.5].CGColor;
         midBtn.layer.borderWidth = 5;
         midLabel.text = @"顺序练习";
+        
     }else if(flag == 2){
+        
         images = images2;
         titles = titles2;
         midBtn.backgroundColor = KColorRGB(19, 153, 229);
         midBtn.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:0.6].CGColor;
         midBtn.layer.borderWidth = 5;
         midLabel.text = @"模拟考试";
+        
     }
+    
     [midBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     midBtn.layer.cornerRadius = 50;
     [self addSubview:midBtn];
+    
     [midBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(ws);
         make.height.width.mas_equalTo(100);
     }];
+    
     [midBtn addSubview:midLabel];
     [midLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.width.equalTo(midBtn);
@@ -66,13 +75,16 @@
     //周围4个按钮
     UIButton *lastBtn = [UIButton new];
     lastBtn = nil;
+    
     for (int i = 0; i < 4; i++) {
+        
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         btn.tag = 100+i;
         btn.backgroundColor = [UIColor whiteColor];
         [self addSubview:btn];
         KWS(ws);
+        
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             if (i%2 == 0) {
                 make.left.equalTo(ws);
@@ -90,6 +102,7 @@
             CGFloat width = (self.frame.size.width-1)/2;
             make.width.mas_equalTo(width);
         }];
+        
         //按钮图片
         UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:images[i]]];
         [btn addSubview:imageView];
